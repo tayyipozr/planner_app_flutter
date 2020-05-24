@@ -13,7 +13,7 @@ class Habit with ChangeNotifier {
     return _items.length;
   }
 
-  void add({String habitId, String name, DateTime dueDate}) {
+  void add({String habitId, String name, DateTime dueDate, IconData icon}) {
     _items.putIfAbsent(
       habitId,
       () => HabitItem(
@@ -21,6 +21,7 @@ class Habit with ChangeNotifier {
         name: name,
         dueDate: dueDate,
         start: DateTime.now(),
+        icon: Icon(icon),
       ),
     );
     notifyListeners();

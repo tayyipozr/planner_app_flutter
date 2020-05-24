@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:planner_app/widgets/habit_bottom_sheet_widget.dart';
+import 'package:planner_app/widgets/habit_item_widget.dart';
 import 'package:provider/provider.dart';
 
 import 'page_control_screen.dart';
@@ -27,21 +29,17 @@ class MyHabitsScreen extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.add),
               onPressed: () {
-                print("TABBED");
-                habit.add(
-                    habitId: "1", name: "Habit 1", dueDate: DateTime.now());
+                showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return HabitBottomSheet();
+                  },
+                );
               },
             )
           ],
         ),
-        body: ListView.builder(
-          itemCount: habit.itemCount,
-          itemBuilder: (_, idx) {
-            return ListTile(
-              title: Text('${habit.items.values.toList()[0].name}'),
-            );
-          },
-        ),
+        body: HabitItemUI(),
       ),
     );
   }

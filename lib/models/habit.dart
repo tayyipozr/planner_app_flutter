@@ -12,6 +12,6 @@ class HabitItem {
     @required this.name,
     @required this.start,
     @required this.dueDate,
-    this.icon,
+    @required this.icon,
   });
 }
