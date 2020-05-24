@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatelessWidget {
-  static const routeName = '/home';
+import 'home_screen.dart';
+
+class PageControlScreen extends StatelessWidget {
+  static const routeName = '/page-control';
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +14,7 @@ class HomeScreen extends StatelessWidget {
       controller: pageController,
       scrollDirection: Axis.horizontal,
       children: <Widget>[
-        Scaffold(body: Center(child: Text("1")), backgroundColor: Colors.blue,),
+        HomeScreen(),
         PageView(
           controller: pageController2,
           scrollDirection: Axis.vertical,
