@@ -1,0 +1,100 @@
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:planner_app/screens/myHabits_screen.dart';
+import '../screens/myDailyPlans_screen.dart';
+
+class DrawerUI extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      elevation: 10,
+      child: Column(
+        children: <Widget>[
+          SizedBox(
+            height: 70,
+          ),
+          Column(
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.perm_identity),
+                title: Text("Name"),
+                subtitle: Text("Bilgisayar mühendisi"),
+              ),
+              Divider(
+                height: 0,
+                thickness: 0.5,
+                color: Colors.black.withOpacity(0.4),
+                indent: 16,
+                endIndent: 16,
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 25,
+          ),
+          Column(
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.loop),
+                title: Text("My Habits"),
+                onTap: () {
+                  Navigator.popAndPushNamed(context, MyHabitsScreen.routeName);
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.timelapse),
+                title: Text("My Daily Plans"),
+                onTap: () {
+                  Navigator.popAndPushNamed(
+                      context, MyDailyPlansScreen.routeName);
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.today),
+                title: Text("My Monthly Plans"),
+                onTap: () => {},
+              ),
+              ListTile(
+                leading: Icon(Icons.calendar_today),
+                title: Text("My Yearly Plans"),
+                onTap: () => {},
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 25,
+          ),
+          Column(
+            children: <Widget>[
+              Divider(
+                height: 0,
+                thickness: 0.5,
+                color: Colors.black.withOpacity(0.4),
+                indent: 16,
+                endIndent: 16,
+              ),
+              ListTile(
+                leading: Icon(Icons.settings),
+                title: Text("Settings"),
+                onTap: () => {},
+              ),
+              ListTile(
+                leading: Icon(Icons.exit_to_app),
+                title: Text("Log out"),
+                onTap: () => logOutApp(context),
+              ),
+              ListTile(
+                leading: Icon(Icons.power_settings_new),
+                title: Text("Exit"),
+                onTap: () => exit(0),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  void logOutApp(BuildContext context) {}
+}

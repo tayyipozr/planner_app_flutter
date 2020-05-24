@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'home_screen.dart';
+import 'myDailyPlans_screen.dart';
+import 'myHabits_screen.dart';
 
 class PageControlScreen extends StatelessWidget {
   static const routeName = '/page-control';
@@ -15,15 +17,16 @@ class PageControlScreen extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       children: <Widget>[
         HomeScreen(),
-        PageView(
-          controller: pageController2,
-          scrollDirection: Axis.vertical,
-          children: <Widget>[
-            Scaffold(body: Center(child: Text("2")), backgroundColor: Colors.yellow),
-            Scaffold(body: Center(child: Text("3")), backgroundColor: Colors.green),
-          ],
-        ),
-        Scaffold(body: Center(child: Text("3")), backgroundColor: Colors.purple),
+        MyHabitsScreen(),
+        // PageView(
+        //   controller: pageController2,
+        //   scrollDirection: Axis.vertical,
+        //   children: <Widget>[
+        //     Scaffold(body: Center(child: Text("2")), backgroundColor: Colors.yellow),
+        //     Scaffold(body: Center(child: Text("3")), backgroundColor: Colors.green),
+        //   ],
+        // ),
+        MyDailyPlansScreen()
       ],
     );
   }
