@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:planner_app/screens/books_to_read_screen.dart';
 
 import 'home_screen.dart';
 import 'myDailyPlans_screen.dart';
@@ -9,9 +10,7 @@ class PageControlScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context).settings.arguments;
-    final pageController = PageController();
-    final pageController2 = PageController();
+    final pageController = PageController();    
     return PageView(
       controller: pageController,
       scrollDirection: Axis.horizontal,
@@ -26,7 +25,7 @@ class PageControlScreen extends StatelessWidget {
         //     Scaffold(body: Center(child: Text("3")), backgroundColor: Colors.green),
         //   ],
         // ),
-        MyDailyPlansScreen()
+        MyDailyPlansScreen(),
       ],
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:planner_app/screens/books_to_read_screen.dart';
 import 'package:provider/provider.dart';
 
 import './screens/page_control_screen.dart';
@@ -6,6 +7,7 @@ import './screens/home_screen.dart';
 import './screens/myDailyPlans_screen.dart';
 import './screens/myHabits_screen.dart';
 import './screens/login_screen.dart';
+import 'providers/book_providers.dart';
 import 'providers/habit_provider.dart';
 
 void main() => runApp(MyApp());
@@ -18,13 +20,15 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider.value(
           value: Habit(),
-        )
+        ),
+        ChangeNotifierProvider.value(
+          value: Book(),
+        ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
-          primaryColor: Colors.blueAccent,
+          primaryColor: Color(0xFFFF9AA2),
           primaryColorDark: Colors.blueGrey,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
@@ -34,6 +38,7 @@ class MyApp extends StatelessWidget {
           PageControlScreen.routeName: (ctx) => PageControlScreen(),
           MyDailyPlansScreen.routeName: (ctx) => MyDailyPlansScreen(),
           MyHabitsScreen.routeName: (ctx) => MyHabitsScreen(),
+          BooksToRead.routeName: (ctx) => BooksToRead(),
         },
       ),
     );
