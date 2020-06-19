@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:planner_app/screens/book_details_screen.dart';
+import 'package:planner_app/screens/page_control_screen.dart';
+import 'package:planner_app/widgets/book_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
 import '../models/book.dart';
@@ -48,7 +51,25 @@ class _BooksToReadState extends State<BooksToRead> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Reading"),
+        title: Text("Yearly Book Plan"),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Navigator.pushReplacementNamed(context, PageControlScreen.routeName);
+          },
+        ),
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return BookBottomSheet();
+                  },
+                );
+              }),
+        ],
       ),
       body: Column(
         children: <Widget>[
@@ -117,10 +138,7 @@ class _BooksToReadState extends State<BooksToRead> {
                                 children: <Widget>[
                                   Container(
                                     height: height / 4.8,
-                                    width: 20.0 *
-                                        (readed.length == null
-                                            ? 0
-                                            : readed.length),
+                                    width: 20.0 * readed.length,
                                     child: ListView.builder(
                                       reverse: idxModulus,
                                       scrollDirection: Axis.horizontal,
@@ -132,10 +150,17 @@ class _BooksToReadState extends State<BooksToRead> {
                                               readed[idx].isRead = false;
                                             });
                                           },
+                                          onLongPress: () {
+                                            Navigator.pushNamed(context,
+                                                BookDetailScreen.routeName,
+                                                arguments: readed[idx].id);
+                                          },
                                           child: Container(
                                             margin: idxModulus
-                                                ? EdgeInsets.only(left: 5)
-                                                : EdgeInsets.only(right: 5),
+                                                ? EdgeInsets.only(
+                                                    left: 5, top: 5)
+                                                : EdgeInsets.only(
+                                                    right: 5, top: 5),
                                             width: 15,
                                             color: Color(0xFFFFBDB9),
                                             child: RotatedBox(
@@ -164,9 +189,12 @@ class _BooksToReadState extends State<BooksToRead> {
                                               unread[idx].isRead = true;
                                             });
                                           },
+                                          onLongPress: () {},
                                           child: Container(
                                             margin: idxModulus
-                                                ? EdgeInsets.only(top: 5)
+                                                ? EdgeInsets.only(
+                                                    top: 5,
+                                                  )
                                                 : EdgeInsets.only(bottom: 5),
                                             height: 15,
                                             color: Colors.brown[200],
@@ -200,6 +228,7 @@ class _BooksToReadState extends State<BooksToRead> {
                                               unread[idx].isRead = true;
                                             });
                                           },
+                                          onLongPress: () {},
                                           child: Container(
                                             margin: EdgeInsets.only(top: 5),
                                             height: 15,
@@ -228,10 +257,17 @@ class _BooksToReadState extends State<BooksToRead> {
                                               readed[idx].isRead = false;
                                             });
                                           },
+                                          onLongPress: () {
+                                            Navigator.pushNamed(context,
+                                                BookDetailScreen.routeName,
+                                                arguments: readed[idx].id);
+                                          },
                                           child: Container(
                                             margin: idxModulus
-                                                ? EdgeInsets.only(left: 5)
-                                                : EdgeInsets.only(right: 5),
+                                                ? EdgeInsets.only(
+                                                    left: 5, top: 5)
+                                                : EdgeInsets.only(
+                                                    right: 5, top: 5),
                                             width: 15,
                                             color: Color(0xFFFFBDB9),
                                             child: RotatedBox(

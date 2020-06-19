@@ -12,6 +12,7 @@ class Book with ChangeNotifier {
       author: "Delia Owens",
       page: 300,
       isRead: false,
+      comment: "This is a great book about Where the Crowdads Sign"
     ),
     "id2": BookItem(
       id: "id2",
@@ -22,6 +23,7 @@ class Book with ChangeNotifier {
       author: "Michelle Obama",
       page: 200,
       isRead: false,
+      comment: "This is a reaaly good story about me"
     ),
     "id3": BookItem(
       id: "id3",
@@ -62,6 +64,17 @@ class Book with ChangeNotifier {
       author: "Richard Back",
       page: 400,
       isRead: true,
+      comment: "This is really good book about birds"
+    ),
+    "id7": BookItem(
+      id: "id7",
+      name: "Simyacı",
+      start: DateTime.now().add(Duration(days: 210)),
+      rating: 4,
+      dueDate: DateTime.now().add(Duration(days: 90)),
+      author: "Richard Back",
+      page: 400,
+      isRead: false,
     )
   };
 
@@ -74,17 +87,18 @@ class Book with ChangeNotifier {
   }
 
   void add(
-      {String bookId, String name, String author, int page, DateTime dueDate}) {
+      {String bookId, String name, String author, int page, DateTime startDate,DateTime dueDate}) {
     _items.putIfAbsent(
       bookId,
       () => BookItem(
         id: bookId,
         name: name,
         dueDate: dueDate,
-        start: DateTime.now(),
+        start: startDate,
         author: author,
         page: page,
         isRead: false,
+        rating: 0,
       ),
     );
     notifyListeners();

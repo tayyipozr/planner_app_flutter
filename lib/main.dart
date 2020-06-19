@@ -9,6 +9,8 @@ import './screens/myHabits_screen.dart';
 import './screens/login_screen.dart';
 import 'providers/book_providers.dart';
 import 'providers/habit_provider.dart';
+import 'screens/book_details_screen.dart';
+import 'screens/register_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -39,6 +41,8 @@ class MyApp extends StatelessWidget {
           MyDailyPlansScreen.routeName: (ctx) => MyDailyPlansScreen(),
           MyHabitsScreen.routeName: (ctx) => MyHabitsScreen(),
           BooksToRead.routeName: (ctx) => BooksToRead(),
+          BookDetailScreen.routeName:(ctx) => BookDetailScreen(),
+          RegisterScreen.routeName: (ctx) => RegisterScreen()
         },
       ),
     );

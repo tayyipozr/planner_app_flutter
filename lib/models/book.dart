@@ -7,8 +7,9 @@ class BookItem {
   final int page;
   final DateTime start;
   final DateTime dueDate;
-  final int rating;
+  int rating;
   bool isRead; 
+  String comment;
 
   BookItem({
     @required this.id,
@@ -16,8 +17,9 @@ class BookItem {
     @required this.author,
     @required this.page,
     @required this.start,
-    this.dueDate,
+    @required this.dueDate,
     this.rating,
     this.isRead,
+    this.comment,
   });
 }

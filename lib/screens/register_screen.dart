@@ -2,18 +2,17 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:planner_app/screens/register_screen.dart';
+import 'package:planner_app/screens/login_screen.dart';
 
-import 'page_control_screen.dart';
-
-class LoginScreen extends StatelessWidget {
-  final form = GlobalKey<FormState>();
+class RegisterScreen extends StatelessWidget {
+  final formR = GlobalKey<FormState>();
+  static const routeName = '/register';
 
   @override
   Widget build(BuildContext context) {
-    final argumentName = ModalRoute.of(context).settings.arguments as String;
     var username;
     var password;
+    var nickname;
 
     return GestureDetector(
       onTap: () {
@@ -23,6 +22,17 @@ class LoginScreen extends StatelessWidget {
         }
       },
       child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back_ios,
+            ),
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, '/');
+            },
+          ),
+        ),
         body: Container(
           width: double.infinity,
           height: double.infinity,
@@ -46,27 +56,47 @@ class LoginScreen extends StatelessWidget {
                         Container(
                           margin: EdgeInsets.only(bottom: 20, top: 50),
                           alignment: Alignment.topLeft,
-                          height: MediaQuery.of(context).size.width / 5,
+                          height: MediaQuery.of(context).size.width / 7,
                           child: Image.asset("assets/img/jdi_login.png"),
                         ),
                       ],
                     ),
                     Container(
-                      height: MediaQuery.of(context).size.width / 2,
+                      height: MediaQuery.of(context).size.width / 3,
                       child: Image.asset("assets/img/line_graph_login.png"),
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width / 1.2,
                       child: Form(
-                        key: form,
+                        key: formR,
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: <Widget>[
                             TextFormField(
-                              initialValue: argumentName,
                               onSaved: (value) => username = value.trim(),
                               decoration: InputDecoration(
                                 labelText: "Username",
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.blueGrey),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(25),
+                                  ),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.blueAccent)),
+                                contentPadding: EdgeInsets.all(20.0),
+                                prefixIcon: Icon(
+                                  Icons.person_outline,
+                                  color: Theme.of(context).primaryColorDark,
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            TextFormField(
+                              onSaved: (value) => nickname = value.trim(),
+                              decoration: InputDecoration(
+                                labelText: "Nickname",
                                 enabledBorder: OutlineInputBorder(
                                   borderSide:
                                       BorderSide(color: Colors.blueGrey),
@@ -106,23 +136,14 @@ class LoginScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            FlatButton(
-                              child: Text(
-                                "Don't you have an account ?",
-                                style: TextStyle(color: Colors.blueAccent),
-                              ),
-                              onPressed: () {
-                                Navigator.of(context).pushReplacementNamed(RegisterScreen.routeName);
-                              },
-                            )
                           ],
                         ),
                       ),
                     ),
                     GestureDetector(
                       onTap: () async {
-                        form.currentState.save();
-                        const url = 'http://10.0.2.2:3000/users/login';
+                        formR.currentState.save();
+                        const url = 'http://10.0.2.2:3000/users';
                         var response = await http.post(
                           url,
                           headers: <String, String>{
@@ -130,20 +151,20 @@ class LoginScreen extends StatelessWidget {
                           },
                           body: jsonEncode(<String, String>{
                             'name': username,
-                            'pass': password
+                            'pass': password,
+                            'nick': nickname
                           }),
                         );
                         if (response.body == "Success") {
-                          Navigator.of(context).pushReplacementNamed(
-                              PageControlScreen.routeName,
-                              arguments: username);
-                        } else if (response.body == "Not allowed") {
+                          Navigator.of(context)
+                              .pushNamed('/', arguments: username);
+                        } else if (response.body == "Duplicate") {
                           showDialog(
                             context: context,
                             builder: (_) => AlertDialog(
                               title: Text("Be Carefull !!"),
-                              content: Text(
-                                  "There is no user with that username and password"),
+                              content:
+                                  Text("This username has already been taken."),
                               actions: <Widget>[
                                 FlatButton(
                                     child: Text("OK"),

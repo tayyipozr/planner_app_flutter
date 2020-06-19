@@ -26,6 +26,7 @@ class PageControlScreen extends StatelessWidget {
         //   ],
         // ),
         MyDailyPlansScreen(),
+        BooksToRead(),
       ],
     );
   }

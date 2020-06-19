@@ -110,5 +110,7 @@ class DrawerUI extends StatelessWidget {
     );
   }
 
-  void logOutApp(BuildContext context) {}
+  void logOutApp(BuildContext context) {
+    Navigator.pushReplacementNamed(context, '/', arguments: "username");
+  }
 }
