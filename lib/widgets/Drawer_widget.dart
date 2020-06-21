@@ -1,13 +1,13 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:planner_app/screens/books_to_read_screen.dart';
-import 'package:planner_app/screens/myHabits_screen.dart';
+
+import '../screens/books_to_read_screen.dart';
+import '../screens/myHabits_screen.dart';
 import '../screens/myDailyPlans_screen.dart';
 
 class DrawerUI extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {    
     return SafeArea(
       child: Drawer(
         elevation: 10,

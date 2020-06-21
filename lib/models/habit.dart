@@ -8,10 +8,10 @@ class HabitItem {
   final DateTime dueDate;
 
   HabitItem({
-    @required this.id,
+    this.id,
     @required this.name,
     @required this.start,
     @required this.dueDate,
-    @required this.icon,
+    this.icon,
   });
 }

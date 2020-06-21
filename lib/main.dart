@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
           primaryColorDark: Colors.blueGrey,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: LoginScreen(),
+        home: MyHabitsScreen(),
         routes: {
           HomeScreen.routeName: (ctx) => HomeScreen(),
           PageControlScreen.routeName: (ctx) => PageControlScreen(),

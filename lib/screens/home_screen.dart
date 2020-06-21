@@ -4,9 +4,8 @@ import 'package:provider/provider.dart';
 import '../models/habit.dart';
 
 import '../providers/habit_provider.dart';
-
 import '../widgets/Drawer_widget.dart';
-import '../widgets/habit_item_info_card.dart';
+import '../widgets/habit/habit_item_info_card.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/home';
@@ -78,6 +77,32 @@ class _HomeScreenState extends State<HomeScreen> {
                             return HabitInfoCard();
                           }),
                     ),
+                    // FlatButton(
+                    //   child: Text("pk"),
+                    //   onPressed: () {
+                    //     const url = 'http://10.0.2.2:3000/user';
+                    //     fetchUser() async {
+                    //       final response = await http.post(
+                    //         url,
+                    //         headers: <String, String>{
+                    //           'Content-Type': 'application/json; charset=UTF-8'
+                    //         },
+                    //         body: jsonEncode(<String, String>{
+                    //           'name': "Tayyip",
+                    //         }),
+                    //       );
+                    //       print(response.body);
+                    //       print(response.statusCode);
+                    //       if (response.statusCode == 200) {
+                    //         return User.fromJson(json.decode(response.body));
+                    //       } else {
+                    //         throw Exception('Failedto load user');
+                    //       }
+                    //     }
+
+                    //     fetchUser();
+                    //   },
+                    // )
                   ],
                 ),
               ],

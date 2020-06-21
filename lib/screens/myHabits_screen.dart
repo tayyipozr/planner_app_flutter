@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:planner_app/widgets/habit_bottom_sheet_widget.dart';
-import 'package:planner_app/widgets/habit_item_widget.dart';
+
+import '../widgets/habit/habit_bottom_sheet_widget.dart';
+import '../widgets/habit/habit_item_widget.dart';
 
 import 'page_control_screen.dart';
 
@@ -29,7 +30,9 @@ class MyHabitsScreen extends StatelessWidget {
                 showModalBottomSheet(
                   context: context,
                   builder: (context) {
-                    return HabitBottomSheet();
+                    return HabitBottomSheet(
+                      fromEdit: false,
+                    );
                   },
                 );
               },
