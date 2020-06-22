@@ -6,24 +6,40 @@ import 'package:http/http.dart' as http;
 import '../models/habit.dart';
 
 class Habit with ChangeNotifier {
+  final String authToken;
+  final String userId;
   Map<String, HabitItem> _items = {};
 
+  Habit.create(this.authToken, this.userId);
+  Habit.update(this.authToken, this.userId, this._items);
+
   Future<void> fetchAndSetHabits() async {
-    const url = 'http://10.0.2.2:3000/habits';
+    final url = 'http://10.0.2.2:3000/habits/$userId';
+    print(authToken);
     try {
-      final response = await http.get(url);
-      final extractedData = json.decode(response.body) as List<dynamic>;
-      final Map<String, HabitItem> loadedProduct = {};
-      extractedData.forEach((habit) {
-        loadedProduct[habit['id'].toString()] = HabitItem(
-          id: habit['id'].toString(),
-          name: habit['name'],
-          start: DateTime.parse(habit['start']),
-          dueDate: DateTime.parse(habit['due']),
-        );
-      });
-      _items = loadedProduct;
-      notifyListeners();
+      final response = await http.get(
+        url,
+        headers: <String, String>{'Authorization': 'Bearer $authToken'},
+      );
+      {
+        if (authToken != null) {
+          final extractedData = json.decode(response.body) as List<dynamic>;
+          print(extractedData);
+          final Map<String, HabitItem> loadedProduct = {};
+          extractedData.forEach((habit) {
+            loadedProduct[habit['id'].toString()] = HabitItem(
+              id: habit['id'].toString(),
+              name: habit['name'],
+              start: DateTime.parse(habit['start']),
+              dueDate: DateTime.parse(habit['due']),
+            );
+          });
+          _items = loadedProduct;
+          notifyListeners();
+        } else {
+          throw Error();
+        }
+      }
     } catch (err) {
       print(err);
       throw (err);
@@ -39,13 +55,14 @@ class Habit with ChangeNotifier {
   }
 
   Future<void> add({String name, DateTime dueDate, IconData icon}) async {
-    const url = 'http://10.0.2.2:3000/habits';
+    final url = 'http://10.0.2.2:3000/habits/$userId';
     final timelapse = DateTime.now();
     try {
       final response = await http.post(
         url,
         headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8'
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $authToken'
         },
         body: jsonEncode(<String, String>{
           'name': name,
@@ -76,11 +93,12 @@ class Habit with ChangeNotifier {
 
   Future<void> updateItem(HabitItem habitItem) async {
     try {
-      final url = 'http://10.0.2.2:3000/habits/${habitItem.id}';
+      final url = 'http://10.0.2.2:3000/habits/$userId/${habitItem.id}';
       await http.patch(
         url,
         headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8'
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $authToken'
         },
         body: jsonEncode(<String, String>{
           'name': habitItem.name,
@@ -106,8 +124,20 @@ class Habit with ChangeNotifier {
   }
 
   void removeItem(String habitId) {
+    final url = 'http://10.0.2.2:3000/habits/$userId/$habitId';
+    final existingProductKey = _items.keys.firstWhere((key) => key == habitId);
+    var existingProduct = items[existingProductKey];
     _items.removeWhere((key, value) => key == habitId);
     notifyListeners();
+    http.delete(url, headers: <String, String>{
+      'Authorization': 'Bearer $authToken'
+    }).then((_) {
+      existingProduct = null;
+    }).catchError((err) {
+      _items[existingProductKey] = existingProduct;
+      print(err);
+      throw err;
+    });
   }
 
   void clear() {

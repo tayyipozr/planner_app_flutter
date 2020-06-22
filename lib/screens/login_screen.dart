@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:planner_app/screens/register_screen.dart';
+import '../providers/auth.dart';
+import 'package:provider/provider.dart';
+import '../screens/register_screen.dart';
 
 import 'page_control_screen.dart';
 
@@ -112,7 +114,8 @@ class LoginScreen extends StatelessWidget {
                                 style: TextStyle(color: Colors.blueAccent),
                               ),
                               onPressed: () {
-                                Navigator.of(context).pushReplacementNamed(RegisterScreen.routeName);
+                                Navigator.of(context).pushReplacementNamed(
+                                    RegisterScreen.routeName);
                               },
                             )
                           ],
@@ -122,39 +125,29 @@ class LoginScreen extends StatelessWidget {
                     GestureDetector(
                       onTap: () async {
                         form.currentState.save();
-                        const url = 'http://10.0.2.2:3000/users/login';
-                        var response = await http.post(
-                          url,
-                          headers: <String, String>{
-                            'Content-Type': 'application/json; charset=UTF-8'
-                          },
-                          body: jsonEncode(<String, String>{
-                            'name': username,
-                            'pass': password
-                          }),
-                        );
-                        if (response.body == "Success") {
-                          Navigator.of(context).pushReplacementNamed(
-                              PageControlScreen.routeName,
-                              arguments: username);
-                        } else if (response.body == "Not allowed") {
-                          showDialog(
-                            context: context,
-                            builder: (_) => AlertDialog(
-                              title: Text("Be Carefull !!"),
-                              content: Text(
-                                  "There is no user with that username and password"),
-                              actions: <Widget>[
-                                FlatButton(
-                                    child: Text("OK"),
-                                    onPressed: () => Navigator.pop(context))
-                              ],
-                            ),
-                          );
-                        } else {
-                          print(response.body);
-                          print(response.statusCode);
-                        }
+                        await Provider.of<Auth>(context, listen: false).login(username, password);
+                        // if (response.body == "Success") {
+                        //   Navigator.of(context).pushReplacementNamed(
+                        //       PageControlScreen.routeName,
+                        //       arguments: username);
+                        // } else if (response.body == "Not allowed") {
+                        //   showDialog(
+                        //     context: context,
+                        //     builder: (_) => AlertDialog(
+                        //       title: Text("Be Carefull !!"),
+                        //       content: Text(
+                        //           "There is no user with that username and password"),
+                        //       actions: <Widget>[
+                        //         FlatButton(
+                        //             child: Text("OK"),
+                        //             onPressed: () => Navigator.pop(context))
+                        //       ],
+                        //     ),
+                        //   );
+                        // } else {
+                        //   print(response.body);
+                        //   print(response.statusCode);
+                        // }
                       },
                       child: Container(
                         margin: EdgeInsets.only(top: 50),

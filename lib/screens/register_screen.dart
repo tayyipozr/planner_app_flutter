@@ -1,8 +1,10 @@
 import 'dart:convert';
-
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:planner_app/screens/login_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../screens/login_screen.dart';
+import '../providers/auth.dart';
 
 class RegisterScreen extends StatelessWidget {
   final formR = GlobalKey<FormState>();
@@ -143,39 +145,40 @@ class RegisterScreen extends StatelessWidget {
                     GestureDetector(
                       onTap: () async {
                         formR.currentState.save();
-                        const url = 'http://10.0.2.2:3000/users';
-                        var response = await http.post(
-                          url,
-                          headers: <String, String>{
-                            'Content-Type': 'application/json; charset=UTF-8'
-                          },
-                          body: jsonEncode(<String, String>{
-                            'name': username,
-                            'pass': password,
-                            'nick': nickname
-                          }),
-                        );
-                        if (response.body == "Success") {
-                          Navigator.of(context)
-                              .pushNamed('/', arguments: username);
-                        } else if (response.body == "Duplicate") {
-                          showDialog(
-                            context: context,
-                            builder: (_) => AlertDialog(
-                              title: Text("Be Carefull !!"),
-                              content:
-                                  Text("This username has already been taken."),
-                              actions: <Widget>[
-                                FlatButton(
-                                    child: Text("OK"),
-                                    onPressed: () => Navigator.pop(context))
-                              ],
-                            ),
-                          );
-                        } else {
-                          print(response.body);
-                          print(response.statusCode);
-                        }
+                        await Provider.of<Auth>(context, listen: false).register(username, password, nickname);
+                        // const url = 'http://10.0.2.2:3000/users';
+                        // var response = await http.post(
+                        //   url,
+                        //   headers: <String, String>{
+                        //     'Content-Type': 'application/json; charset=UTF-8'
+                        //   },
+                        //   body: jsonEncode(<String, String>{
+                        //     'name': username,
+                        //     'pass': password,
+                        //     'nick': nickname
+                        //   }),
+                        // );
+                        // if (response.body == "Success") {
+                        //   Navigator.of(context)
+                        //       .pushNamed('/', arguments: username);
+                        // } else if (response.body == "Duplicate") {
+                        //   showDialog(
+                        //     context: context,
+                        //     builder: (_) => AlertDialog(
+                        //       title: Text("Be Carefull !!"),
+                        //       content:
+                        //           Text("This username has already been taken."),
+                        //       actions: <Widget>[
+                        //         FlatButton(
+                        //             child: Text("OK"),
+                        //             onPressed: () => Navigator.pop(context))
+                        //       ],
+                        //     ),
+                        //   );
+                        // } else {
+                        //   print(response.body);
+                        //   print(response.statusCode);
+                        // }
                       },
                       child: Container(
                         margin: EdgeInsets.only(top: 50),

@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:planner_app/providers/auth.dart';
+import 'package:provider/provider.dart';
 
 import '../screens/books_to_read_screen.dart';
 import '../screens/myHabits_screen.dart';
@@ -51,6 +53,7 @@ class DrawerUI extends StatelessWidget {
                     leading: Icon(Icons.timelapse),
                     title: Text("My Daily Plans"),
                     onTap: () {
+                      Provider.of<Auth>(context, listen: false).tryAutoLogin();
                       Navigator.popAndPushNamed(
                           context, MyDailyPlansScreen.routeName);
                     },
@@ -93,7 +96,7 @@ class DrawerUI extends StatelessWidget {
                   ),
                   ListTile(
                     leading: Icon(Icons.exit_to_app),
-                    title: Text("Log out"),
+                    title: Text("Logout"),
                     onTap: () => logOutApp(context),
                   ),
                   ListTile(
@@ -111,6 +114,8 @@ class DrawerUI extends StatelessWidget {
   }
 
   void logOutApp(BuildContext context) {
-    Navigator.pushReplacementNamed(context, '/', arguments: "username");
+      Navigator.of(context).pop();
+      Navigator.of(context).pushReplacementNamed('/');
+      Provider.of<Auth>(context, listen: false).logout();
   }
 }

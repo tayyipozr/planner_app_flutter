@@ -37,7 +37,7 @@ class _HabitItemUIState extends State<HabitItemUI> {
 
   @override
   Widget build(BuildContext context) {
-    final habit = Provider.of<Habit>(context);
+    final habit = Provider.of<Habit>(context, listen: false);
     List<HabitItem> habits = habit.items.values.toList();
     return _isLoading
         ? Center(
@@ -87,8 +87,52 @@ class _HabitItemUIState extends State<HabitItemUI> {
                               color: Colors.red,
                               icon: Icon(Icons.delete),
                               onPressed: () {
-                                //habit.removeItem(habits[idx].id);
-                                print(habits.length);
+                                showDialog(
+                                    context: context,
+                                    builder: (ctx) => AlertDialog(
+                                          title: Text("Are you sure to delete"),
+                                          content: Text(""),
+                                          actions: <Widget>[
+                                            FlatButton(
+                                              child: Text("YES"),
+                                              onPressed: () {
+                                                try {
+                                                  habit.removeItem(
+                                                      habits[idx].id);
+                                                  print(habits[idx].id);
+                                                  Navigator.of(context).pop();
+                                                } catch (err) {
+                                                  print(err);
+                                                  showDialog(
+                                                      context: context,
+                                                      builder: (ctx) =>
+                                                          AlertDialog(
+                                                            title: Text(
+                                                                "An error occured"),
+                                                            content: Text(
+                                                                err.toString()),
+                                                            actions: <Widget>[
+                                                              FlatButton(
+                                                                child:
+                                                                    Text("OK"),
+                                                                onPressed: () {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                },
+                                                              )
+                                                            ],
+                                                          ));
+                                                }
+                                              },
+                                            ),
+                                            FlatButton(
+                                              child: Text("NO"),
+                                              onPressed: () =>
+                                                  Navigator.of(context).pop(),
+                                            )
+                                          ],
+                                        ));
                               },
                             )
                           ],
