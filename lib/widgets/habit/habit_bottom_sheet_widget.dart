@@ -17,7 +17,7 @@ class HabitBottomSheet extends StatefulWidget {
     this.name,
     this.start,
     this.due,
-    this.fromEdit,
+    this.fromEdit = false,
   });
 
   @override
@@ -170,7 +170,9 @@ class _HabitBottomSheetState extends State<HabitBottomSheet> {
                                         id: widget.id,
                                         name: _habitName,
                                         start: DateTime.now(),
-                                        dueDate: _selectedDateDue == null ? widget.due : _selectedDateDue,
+                                        dueDate: _selectedDateDue == null
+                                            ? widget.due
+                                            : _selectedDateDue,
                                       ),
                                     )
                                   : await Provider.of<Habit>(context,

@@ -1,27 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:planner_app/screens/book_details_screen.dart';
-import 'package:planner_app/screens/page_control_screen.dart';
-import 'package:planner_app/widgets/book_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
+import '../screens/book_details_screen.dart';
+import '../screens/page_control_screen.dart';
+
+import '../widgets/book_bottom_sheet.dart';
+
 import '../models/book.dart';
+
 import '../providers/book_providers.dart';
 
 class BooksToRead extends StatefulWidget {
   static const routeName = "/books-to-read";
-
   @override
   _BooksToReadState createState() => _BooksToReadState();
 }
 
 class _BooksToReadState extends State<BooksToRead> {
+  var _isInit = true;
+  var _isLoading = false;
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      setState(() {
+        _isLoading = true;
+      });
+      Provider.of<Book>(context, listen: false).fetchAndSetBooks().then((_) => {
+            setState(() {
+              _isLoading = false;
+            })
+          });
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     final book = Provider.of<Book>(context);
     List<BookItem> books = book.items.values.toList();
     List<BookItem> tempReaded = [];
     List<BookItem> tempUnread = [];
+    final bookshelfColor = Colors.orange;
 
     book.items.values.forEach((element) {
       if (element.isRead == true) {
@@ -50,12 +71,14 @@ class _BooksToReadState extends State<BooksToRead> {
     ];
 
     return Scaffold(
+      backgroundColor: bookshelfColor,
       appBar: AppBar(
         title: Text("Yearly Book Plan"),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
-            Navigator.pushReplacementNamed(context, PageControlScreen.routeName);
+            Navigator.pushReplacementNamed(
+                context, PageControlScreen.routeName);
           },
         ),
         actions: <Widget>[
@@ -121,11 +144,11 @@ class _BooksToReadState extends State<BooksToRead> {
                               width: 3,
                             ),
                             left: BorderSide(
-                              color: idxModulus ? Colors.brown : Colors.white,
+                              color: idxModulus ? Colors.brown : bookshelfColor,
                               width: 2,
                             ),
                             right: BorderSide(
-                              color: idxModulus ? Colors.white : Colors.brown,
+                              color: idxModulus ? bookshelfColor : Colors.brown,
                               width: 2,
                             ),
                           ),
@@ -145,10 +168,11 @@ class _BooksToReadState extends State<BooksToRead> {
                                       itemCount: readed.length,
                                       itemBuilder: (ctx, idx) {
                                         return InkWell(
-                                          onTap: () {
-                                            setState(() {
-                                              readed[idx].isRead = false;
-                                            });
+                                          onDoubleTap: () {
+                                            book.updateItem(BookItem(
+                                              id: readed[idx].id,
+                                              isRead: false,
+                                            ));
                                           },
                                           onLongPress: () {
                                             Navigator.pushNamed(context,
@@ -184,10 +208,11 @@ class _BooksToReadState extends State<BooksToRead> {
                                       itemCount: unread.length,
                                       itemBuilder: (ctx, idx) {
                                         return InkWell(
-                                          onTap: () {
-                                            setState(() {
-                                              unread[idx].isRead = true;
-                                            });
+                                          onDoubleTap: () {
+                                            book.updateItem(BookItem(
+                                              id: unread[idx].id,
+                                              isRead: true,
+                                            ));
                                           },
                                           onLongPress: () {},
                                           child: Container(
@@ -223,10 +248,11 @@ class _BooksToReadState extends State<BooksToRead> {
                                       itemCount: unread.length,
                                       itemBuilder: (ctx, idx) {
                                         return InkWell(
-                                          onTap: () {
-                                            setState(() {
-                                              unread[idx].isRead = true;
-                                            });
+                                          onDoubleTap: () {
+                                            book.updateItem(BookItem(
+                                              id: unread[idx].id,
+                                              isRead: true,
+                                            ));
                                           },
                                           onLongPress: () {},
                                           child: Container(
@@ -252,10 +278,11 @@ class _BooksToReadState extends State<BooksToRead> {
                                       itemCount: readed.length,
                                       itemBuilder: (ctx, idx) {
                                         return InkWell(
-                                          onTap: () {
-                                            setState(() {
-                                              readed[idx].isRead = false;
-                                            });
+                                          onDoubleTap: () {
+                                            book.updateItem(BookItem(
+                                              id: readed[idx].id,
+                                              isRead: false,
+                                            ));
                                           },
                                           onLongPress: () {
                                             Navigator.pushNamed(context,

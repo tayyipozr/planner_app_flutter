@@ -32,8 +32,11 @@ class MyApp extends StatelessWidget {
               Habit.update(auth.token, auth.userId,
                   previous == null ? {} : previous.items),
         ),
-        ChangeNotifierProvider.value(
-          value: Book(),
+        ChangeNotifierProxyProvider<Auth, Book>(
+          create: (BuildContext context) => Book.create("", ""),
+          update: (BuildContext context, Auth auth, Book previous) =>
+              Book.update(auth.token, auth.userId,
+                  previous == null ? {} : previous.items),
         ),
       ],
       child: Consumer<Auth>(

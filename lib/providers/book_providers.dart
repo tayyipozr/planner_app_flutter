@@ -1,82 +1,55 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import '../models/book.dart';
 
 class Book with ChangeNotifier {
-  Map<String, BookItem> _items = {
-    "id": BookItem(
-      id: "id",
-      name: "Where the Crawdads Sing",
-      start: DateTime.now().add(Duration(days: 120)),
-      rating: 5,
-      dueDate: DateTime.now().add(Duration(days: 90)),
-      author: "Delia Owens",
-      page: 300,
-      isRead: false,
-      comment: "This is a great book about Where the Crowdads Sign"
-    ),
-    "id2": BookItem(
-      id: "id2",
-      name: "My Story",
-      start: DateTime.now().add(Duration(days: 30)),
-      rating: 4,
-      dueDate: DateTime.now().add(Duration(days: 90)),
-      author: "Michelle Obama",
-      page: 200,
-      isRead: false,
-      comment: "This is a reaaly good story about me"
-    ),
-    "id3": BookItem(
-      id: "id3",
-      name: "Ufak Yanginlar: Dergi Zeitschrift",
-      start: DateTime.now().add(Duration(days: 60)),
-      rating: 1,
-      dueDate: DateTime.now().add(Duration(days: 90)),
-      author: "Celeste Ng",
-      page: 100,
-      isRead: true,
-    ),
-    "id4": BookItem(
-      id: "id4",
-      name: "White Fragility",
-      start: DateTime.now().add(Duration(days: 240)),
-      rating: 2,
-      dueDate: DateTime.now().add(Duration(days: 90)),
-      author: "Robin DiAngelo",
-      page: 150,
-      isRead: true,
-    ),
-    "id5": BookItem(
-      id: "id5",
-      name: "Normal People",
-      start: DateTime.now().add(Duration(days: 150)),
-      rating: 3,
-      dueDate: DateTime.now().add(Duration(days: 90)),
-      author: "Sally Rooney",
-      page: 250,
-      isRead: true,
-    ),
-    "id6": BookItem(
-      id: "id6",
-      name: "Martı",
-      start: DateTime.now().add(Duration(days: 210)),
-      rating: 4,
-      dueDate: DateTime.now().add(Duration(days: 90)),
-      author: "Richard Back",
-      page: 400,
-      isRead: true,
-      comment: "This is really good book about birds"
-    ),
-    "id7": BookItem(
-      id: "id7",
-      name: "Simyacı",
-      start: DateTime.now().add(Duration(days: 210)),
-      rating: 4,
-      dueDate: DateTime.now().add(Duration(days: 90)),
-      author: "Richard Back",
-      page: 400,
-      isRead: false,
-    )
-  };
+  final String authToken;
+  final String userId;
+  Map<String, BookItem> _items = {};
+
+  Book.create(this.authToken, this.userId);
+  Book.update(this.authToken, this.userId, this._items);
+
+  Future<void> fetchAndSetBooks() async {
+    final url = 'http://10.0.2.2:3000/books/$userId';
+    print(authToken);
+    try {
+      final response = await http.get(
+        url,
+        headers: <String, String>{'Authorization': 'Bearer $authToken'},
+      );
+      {
+        if (authToken != null) {
+          final extractedData = json.decode(response.body) as List<dynamic>;
+          print(extractedData);
+          final Map<String, BookItem> loadedBook = {};
+          extractedData.forEach((book) {
+            //print(book['isRead']['data'][0].runtimeType);
+            loadedBook[book['id'].toString()] = BookItem(
+              id: book['id'].toString(),
+              name: book['name'],
+              start: DateTime.parse(book['start']),
+              dueDate: DateTime.parse(book['due']),
+              author: book['author'],
+              page: book['page'],
+              comment: book['comments'],
+              isRead: book['isRead']['data'][0] == 0 ? false : true,
+              rating: book['b_rating'],
+            );
+          });
+          _items = loadedBook;
+          notifyListeners();
+        } else {
+          throw Error();
+        }
+      }
+    } catch (err) {
+      print(err);
+      throw (err);
+    }
+  }
 
   Map<String, BookItem> get items {
     return {..._items};
@@ -86,45 +59,143 @@ class Book with ChangeNotifier {
     return _items.length;
   }
 
-  void add(
-      {String bookId, String name, String author, int page, DateTime startDate,DateTime dueDate}) {
-    _items.putIfAbsent(
-      bookId,
-      () => BookItem(
-        id: bookId,
-        name: name,
-        dueDate: dueDate,
-        start: startDate,
-        author: author,
-        page: page,
-        isRead: false,
-        rating: 0,
-      ),
-    );
-    notifyListeners();
+  Future<void> add({
+    String name,
+    String author,
+    int page,
+    DateTime startDate,
+    DateTime dueDate,
+  }) async {
+    final url = 'http://10.0.2.2:3000/books/$userId';
+    try {
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $authToken'
+        },
+        body: jsonEncode(<String, dynamic>{
+          'name': name,
+          'author': author,
+          'page': page,
+          'start': startDate.toIso8601String(),
+          'due': dueDate.toIso8601String(),
+        }),
+      );
+      final responseBody = json.decode(response.body);
+      final bookId = responseBody['insertId'].toString();
+      _items.putIfAbsent(
+        bookId,
+        () => BookItem(
+          id: bookId,
+          name: name,
+          dueDate: dueDate,
+          start: startDate,
+          author: author,
+          page: page,
+          isRead: false,
+          rating: 0,
+          comment: "",
+        ),
+      );
+      notifyListeners();
+    } catch (err) {
+      print(err);
+      throw err;
+    }
   }
 
   @override
   notifyListeners();
 
-  void updateItem(BookItem bookItem) {
-    _items.update(
-      bookItem.id,
-      (existing) => BookItem(
-        name: bookItem.name,
-        dueDate: bookItem.dueDate,
-        id: bookItem.id,
-        start: bookItem.start,
-        author: bookItem.author,
-        page: bookItem.page,
-        isRead: bookItem.isRead,
-      ),
-    );
+  Future<void> updateItem(BookItem bookItem) async {
+    final values = [
+      bookItem.name,
+      bookItem.author,
+      bookItem.page,
+      bookItem.start == null ? null : bookItem.start.toIso8601String(),
+      bookItem.dueDate == null ? null : bookItem.start.toIso8601String(),
+      bookItem.rating,
+      bookItem.isRead,
+      bookItem.comment
+    ];
+    final str = [
+      'name',
+      'author',
+      'page',
+      'start',
+      'due',
+      'rating',
+      'read',
+      'comment'
+    ];
+    Map<String, dynamic> change = {};
+    for (var i = 0; i < values.length; i++) {
+      final value = values[i];
+      if (value != null) {
+        change[str[i]] = value;
+      }
+    }
+    print('change');
+    print(change);
+    print(jsonEncode(change));
+    print('success');
+    final url = 'http://10.0.2.2:3000/books/$userId/${bookItem.id}';
+    try {
+      final response = await http.patch(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $authToken'
+        },
+        body: jsonEncode(change),
+      );
+      // print(response.body);
+      // final ex =
+      //     _items[_items.keys.firstWhere((element) => element == bookItem.id)];
+      // print(ex.rating);
+      // print(ex.name);
+      // print(ex.author);
+      // print(ex.dueDate);
+      // print(ex.start);
+      _items.update(
+        bookItem.id,
+        (existing) => BookItem(
+            id: bookItem.id,
+            name: bookItem.name == null ? existing.name : bookItem.name,
+            dueDate:
+                bookItem.dueDate == null ? existing.dueDate : bookItem.dueDate,
+            start: bookItem.start == null ? existing.start : bookItem.start,
+            author: bookItem.author == null ? existing.author : bookItem.author,
+            page: bookItem.page == null ? existing.page : bookItem.page,
+            isRead: bookItem.isRead == null ? existing.isRead : bookItem.isRead,
+            comment:
+                bookItem.comment == null ? existing.comment : bookItem.comment,
+            rating:
+                bookItem.rating == null ? existing.rating : bookItem.rating),
+      );
+      notifyListeners();
+    } catch (err) {
+      print(err);
+      throw err;
+    }
   }
 
-  void removeItem(String bookId) {
+  Future<void> removeItem(String bookId) async {
+    final existingBookKey = _items.keys.firstWhere((key) => key == bookId);
+    var existingBook = _items[existingBookKey];
     _items.removeWhere((key, value) => key == bookId);
     notifyListeners();
+    final url = 'http://10.0.2.2:3000/books/$userId/$bookId';
+    await http.delete(url, headers: <String, String>{
+      'Authorization': 'Bearer $authToken'
+    }).then((_) {
+      existingBook = null;
+    }).catchError((err) {
+      _items[existingBookKey] = existingBook;
+      print(err);
+      throw err;
+    });
   }
 
   void clear() {

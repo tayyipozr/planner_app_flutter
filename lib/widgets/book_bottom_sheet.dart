@@ -1,10 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:planner_app/models/book.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/book_providers.dart';
 
 class BookBottomSheet extends StatefulWidget {
+  final String id;
+  final String name;
+  final String author;
+  final int page;
+  final DateTime due;
+  final DateTime start;
+  final bool fromEdit;
+
+  BookBottomSheet(
+      {this.id,
+      this.name,
+      this.author,
+      this.page,
+      this.due,
+      this.start,
+      this.fromEdit = false});
+
   @override
   _BookBottomSheetState createState() => _BookBottomSheetState();
 }
@@ -71,6 +89,7 @@ class _BookBottomSheetState extends State<BookBottomSheet> {
                 Padding(
                   padding: const EdgeInsets.all(2.0),
                   child: TextFormField(
+                    initialValue: widget.name,
                     decoration: InputDecoration(labelText: "Book name"),
                     onSaved: (value) {
                       setState(() {
@@ -82,6 +101,7 @@ class _BookBottomSheetState extends State<BookBottomSheet> {
                 Padding(
                   padding: const EdgeInsets.all(2.0),
                   child: TextFormField(
+                    initialValue: widget.author,
                     decoration: InputDecoration(labelText: "Author"),
                     onSaved: (value) {
                       setState(() {
@@ -93,6 +113,7 @@ class _BookBottomSheetState extends State<BookBottomSheet> {
                 Padding(
                   padding: const EdgeInsets.all(2.0),
                   child: TextFormField(
+                    initialValue: widget.fromEdit ? widget.page.toString() : null,
                     decoration: InputDecoration(labelText: "Page"),
                     onSaved: (value) {
                       setState(() {
@@ -108,7 +129,9 @@ class _BookBottomSheetState extends State<BookBottomSheet> {
                       Expanded(
                         child: Text(
                           _selectedDateStart == null
-                              ? 'No Date Chosen For Start Date!'
+                              ? widget.fromEdit
+                                  ? 'Picked Date:  ${widget.due}'
+                                  : 'No Date Chosen For Due Date!'
                               : 'Picked Date:  ${DateFormat.yMd().format(_selectedDateStart)}',
                         ),
                       ),
@@ -130,7 +153,9 @@ class _BookBottomSheetState extends State<BookBottomSheet> {
                       Expanded(
                         child: Text(
                           _selectedDateDue == null
-                              ? 'No Date Chosen For Due Date!'
+                              ? widget.fromEdit
+                                  ? 'Picked Date:  ${widget.due}'
+                                  : 'No Date Chosen For Due Date!'
                               : 'Picked Date:  ${DateFormat.yMd().format(_selectedDateDue)}',
                         ),
                       ),
@@ -150,14 +175,34 @@ class _BookBottomSheetState extends State<BookBottomSheet> {
                   child: FlatButton(
                     onPressed: () {
                       _form.currentState.save();
-                      book.add(
-                        bookId: DateTime.now().toString(),
-                        name: _bookName,
-                        startDate: _selectedDateStart,
-                        dueDate: _selectedDateDue,
-                        author: _author,
-                        page: _page,
-                      );
+                      print(_selectedDateDue.toString() +
+                          " - " +
+                          widget.due.toString());
+                      print(widget.name);
+                      print(_bookName);
+                      widget.fromEdit
+                          ? book.updateItem(
+                              BookItem(
+                                id: widget.id,
+                                author:
+                                    _author == widget.author ? null : _author,
+                                comment: null,
+                                dueDate: _selectedDateDue,
+                                isRead: null,
+                                name:
+                                    _bookName == widget.name ? null : _bookName,
+                                page: _page == widget.page ? null : _page,
+                                rating: null,
+                                start: _selectedDateStart,
+                              ),
+                            )
+                          : book.add(
+                              name: _bookName,
+                              startDate: _selectedDateStart,
+                              dueDate: _selectedDateDue,
+                              author: _author,
+                              page: _page,
+                            );
                       Navigator.pop(context);
                     },
                     child: Text(

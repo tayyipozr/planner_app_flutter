@@ -125,16 +125,16 @@ class Habit with ChangeNotifier {
 
   void removeItem(String habitId) {
     final url = 'http://10.0.2.2:3000/habits/$userId/$habitId';
-    final existingProductKey = _items.keys.firstWhere((key) => key == habitId);
-    var existingProduct = items[existingProductKey];
+    final existingHabitKey = _items.keys.firstWhere((key) => key == habitId);
+    var existingHabit = items[existingHabitKey];
     _items.removeWhere((key, value) => key == habitId);
     notifyListeners();
     http.delete(url, headers: <String, String>{
       'Authorization': 'Bearer $authToken'
     }).then((_) {
-      existingProduct = null;
+      existingHabit = null;
     }).catchError((err) {
-      _items[existingProductKey] = existingProduct;
+      _items[existingHabitKey] = existingHabit;
       print(err);
       throw err;
     });

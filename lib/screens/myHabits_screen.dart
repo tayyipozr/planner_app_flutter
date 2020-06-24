@@ -30,9 +30,7 @@ class MyHabitsScreen extends StatelessWidget {
                 showModalBottomSheet(
                   context: context,
                   builder: (context) {
-                    return HabitBottomSheet(
-                      fromEdit: false,
-                    );
+                    return HabitBottomSheet();
                   },
                 );
               },

@@ -8,16 +8,16 @@ class BookItem {
   final DateTime start;
   final DateTime dueDate;
   int rating;
-  bool isRead; 
+  bool isRead;
   String comment;
 
   BookItem({
-    @required this.id,
-    @required this.name,
-    @required this.author,
-    @required this.page,
-    @required this.start,
-    @required this.dueDate,
+    this.id,
+    this.name,
+    this.author,
+    this.page,
+    this.start,
+    this.dueDate,
     this.rating,
     this.isRead,
     this.comment,

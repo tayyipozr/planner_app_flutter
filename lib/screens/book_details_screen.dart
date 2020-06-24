@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:planner_app/widgets/book_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/book_providers.dart';
@@ -13,15 +14,23 @@ class BookDetailScreen extends StatefulWidget {
 }
 
 class _BookDetailScreenState extends State<BookDetailScreen> {
+  var tempComment;
+
+  @override
+  void initState() {
+    tempComment = "";
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final bookId = ModalRoute.of(context).settings.arguments as String;
     final book = Provider.of<Book>(context);
     BookItem bookItem;
     List<BookItem> books = book.items.values.toList();
-    books.forEach((element) {
-      if (element.id == bookId) {
-        bookItem = element;
+    books.forEach((book) {
+      if (book.id == bookId) {
+        bookItem = book;
       }
     });
 
@@ -36,11 +45,49 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              if (tempComment != "") {
+                book.updateItem(BookItem(id: bookId, comment: tempComment));
+              }
+              Navigator.of(context).pop();
+            }),
         title: Text(bookItem.name),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.file_upload),
+            onPressed: () {
+              showModalBottomSheet(
+                  context: context,
+                  builder: (ctx) => BookBottomSheet(
+                        id: bookItem.id,
+                        name: bookItem.name,
+                        author: bookItem.author,
+                        page: bookItem.page,
+                        start: bookItem.start,
+                        due: bookItem.dueDate,
+                        fromEdit: true,
+                      ));
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: () {
+              Provider.of<Book>(context, listen: false).removeItem(bookId);
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
       ),
       body: GestureDetector(
         onTap: () {
+          tempComment = tempComment.trim();
+          print("temp :" + tempComment);
           FocusScope.of(context).unfocus();
+          if (tempComment != "") {
+            book.updateItem(BookItem(id: bookId, comment: tempComment));
+          }
         },
         child: SingleChildScrollView(
           child: Column(
@@ -61,6 +108,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                         color: Color(0xFFFFDAC1),
                         borderRadius: BorderRadius.circular(22)),
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         Text("Author : " + bookItem.author),
                         Divider(),
@@ -74,8 +122,8 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                         Divider(),
                         Container(
                           alignment: Alignment.center,
-                          height: 30,
-                          width: 120,
+                          height: MediaQuery.of(context).size.height / 25,
+                          width: MediaQuery.of(context).size.width / 3,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             itemCount: ratingList.length,
@@ -85,9 +133,13 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                                   print(ratingList[idx]);
                                   setState(() {
                                     if (ratingList[idx])
-                                      bookItem.rating++;
+                                      book.updateItem(BookItem(
+                                          id: bookId,
+                                          rating: ++bookItem.rating));
                                     else
-                                      bookItem.rating--;
+                                      book.updateItem(BookItem(
+                                          id: bookId,
+                                          rating: --bookItem.rating));
                                   });
                                   print(ratingList[idx]);
                                 },
@@ -109,7 +161,8 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                 height: (MediaQuery.of(context).size.height / 3) * 1.5,
                 width: MediaQuery.of(context).size.width - 50,
                 child: TextFormField(
-                  onChanged: (value) => bookItem.comment = value,
+                  autofocus: true,
+                  onChanged: (value) => tempComment = value,
                   initialValue:
                       bookItem.comment == null ? "" : bookItem.comment,
                   decoration: InputDecoration(
@@ -117,7 +170,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                       alignLabelWithHint: true),
                   keyboardType: TextInputType.multiline,
                   maxLines: 15,
-                  maxLength: 500,
+                  maxLength: 300,
                 ),
               ),
             ],
