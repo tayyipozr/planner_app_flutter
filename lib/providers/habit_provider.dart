@@ -14,7 +14,7 @@ class Habit with ChangeNotifier {
   Habit.update(this.authToken, this.userId, this._items);
 
   Future<void> fetchAndSetHabits() async {
-    final url = 'http://10.0.2.2:3000/habits/$userId';
+    final url = 'https://10.0.2.2:3000/habits/$userId';
     print(authToken);
     try {
       final response = await http.get(
@@ -55,7 +55,7 @@ class Habit with ChangeNotifier {
   }
 
   Future<void> add({String name, DateTime dueDate, IconData icon}) async {
-    final url = 'http://10.0.2.2:3000/habits/$userId';
+    final url = 'https://10.0.2.2:3000/habits/$userId';
     final timelapse = DateTime.now();
     try {
       final response = await http.post(
@@ -93,7 +93,7 @@ class Habit with ChangeNotifier {
 
   Future<void> updateItem(HabitItem habitItem) async {
     try {
-      final url = 'http://10.0.2.2:3000/habits/$userId/${habitItem.id}';
+      final url = 'https://10.0.2.2:3000/habits/$userId/${habitItem.id}';
       await http.patch(
         url,
         headers: <String, String>{
@@ -124,7 +124,7 @@ class Habit with ChangeNotifier {
   }
 
   void removeItem(String habitId) {
-    final url = 'http://10.0.2.2:3000/habits/$userId/$habitId';
+    final url = 'https://10.0.2.2:3000/habits/$userId/$habitId';
     final existingHabitKey = _items.keys.firstWhere((key) => key == habitId);
     var existingHabit = items[existingHabitKey];
     _items.removeWhere((key, value) => key == habitId);

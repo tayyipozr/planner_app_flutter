@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Auth with ChangeNotifier {
   String _token;
@@ -32,7 +31,7 @@ class Auth with ChangeNotifier {
 
   Future<void> register(
       String username, String password, String nickname) async {
-    const url = "http://10.0.2.2:3000/users/register";
+    const url = "https://10.0.2.2:3000/users/register";
     try {
       final response = await http.post(
         url,
@@ -55,7 +54,7 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> login(String username, String password) async {
-    const url = "http://10.0.2.2:3000/users/login";
+    const url = "https://10.0.2.2:3000/users/login";
     try {
       final response = await http.post(
         url,
