@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:planner_app/screens/books_to_read_screen.dart';
+import 'package:planner_app/screens/places_to_go_screen.dart';
 
 import 'home_screen.dart';
 import 'myDailyPlans_screen.dart';
@@ -27,6 +28,7 @@ class PageControlScreen extends StatelessWidget {
         // ),
         MyDailyPlansScreen(),
         BooksToRead(),
+        PlacesToGoScreen(),
       ],
     );
   }

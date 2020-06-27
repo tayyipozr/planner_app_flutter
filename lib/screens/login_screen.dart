@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -125,29 +126,12 @@ class LoginScreen extends StatelessWidget {
                     GestureDetector(
                       onTap: () async {
                         form.currentState.save();
-                        await Provider.of<Auth>(context, listen: false).login(username, password);
-                        // if (response.body == "Success") {
-                        //   Navigator.of(context).pushReplacementNamed(
-                        //       PageControlScreen.routeName,
-                        //       arguments: username);
-                        // } else if (response.body == "Not allowed") {
-                        //   showDialog(
-                        //     context: context,
-                        //     builder: (_) => AlertDialog(
-                        //       title: Text("Be Carefull !!"),
-                        //       content: Text(
-                        //           "There is no user with that username and password"),
-                        //       actions: <Widget>[
-                        //         FlatButton(
-                        //             child: Text("OK"),
-                        //             onPressed: () => Navigator.pop(context))
-                        //       ],
-                        //     ),
-                        //   );
-                        // } else {
-                        //   print(response.body);
-                        //   print(response.statusCode);
-                        // }
+                        try {
+                          await Provider.of<Auth>(context, listen: false)
+                              .login(username, password);
+                        } catch (e) {
+                          print(e.toString());
+                        }
                       },
                       child: Container(
                         margin: EdgeInsets.only(top: 50),

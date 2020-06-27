@@ -31,7 +31,7 @@ class Auth with ChangeNotifier {
 
   Future<void> register(
       String username, String password, String nickname) async {
-    const url = "https://10.0.2.2:3000/users/register";
+    const url = "http://10.0.2.2:3000/users/register";
     try {
       final response = await http.post(
         url,
@@ -54,7 +54,7 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> login(String username, String password) async {
-    const url = "https://10.0.2.2:3000/users/login";
+    const url = "http://10.0.2.2:3000/users/login";
     try {
       final response = await http.post(
         url,
@@ -86,7 +86,7 @@ class Auth with ChangeNotifier {
       });
       prefs.setString('userData', userData);
     } catch (e) {
-      print(e);
+      print(e.message);
       throw e;
     }
   }

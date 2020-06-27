@@ -13,7 +13,7 @@ class Book with ChangeNotifier {
   Book.update(this.authToken, this.userId, this._items);
 
   Future<void> fetchAndSetBooks() async {
-    final url = 'https://10.0.2.2:3000/books/$userId';
+    final url = 'http://10.0.2.2:3000/books/';
     print(authToken);
     try {
       final response = await http.get(
@@ -66,7 +66,7 @@ class Book with ChangeNotifier {
     DateTime startDate,
     DateTime dueDate,
   }) async {
-    final url = 'https://10.0.2.2:3000/books/$userId';
+    final url = 'http://10.0.2.2:3000/books/';
     try {
       final response = await http.post(
         url,
@@ -140,7 +140,7 @@ class Book with ChangeNotifier {
     print(change);
     print(jsonEncode(change));
     print('success');
-    final url = 'https://10.0.2.2:3000/books/$userId/${bookItem.id}';
+    final url = 'http://10.0.2.2:3000/books/${bookItem.id}';
     try {
       final response = await http.patch(
         url,
@@ -186,7 +186,7 @@ class Book with ChangeNotifier {
     var existingBook = _items[existingBookKey];
     _items.removeWhere((key, value) => key == bookId);
     notifyListeners();
-    final url = 'https://10.0.2.2:3000/books/$userId/$bookId';
+    final url = 'http://10.0.2.2:3000/books/$bookId';
     await http.delete(url, headers: <String, String>{
       'Authorization': 'Bearer $authToken'
     }).then((_) {

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:planner_app/helpers/custom_route.dart';
 import 'package:planner_app/providers/auth.dart';
 import 'package:provider/provider.dart';
 
@@ -9,7 +10,7 @@ import '../screens/myDailyPlans_screen.dart';
 
 class DrawerUI extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {    
+  Widget build(BuildContext context) {
     return SafeArea(
       child: Drawer(
         elevation: 10,
@@ -47,6 +48,7 @@ class DrawerUI extends StatelessWidget {
                     onTap: () {
                       Navigator.popAndPushNamed(
                           context, MyHabitsScreen.routeName);
+                      //Navigator.of(context).pushReplacement(CustomRoute(builder: (ctx) => MyHabitsScreen()));
                     },
                   ),
                   ListTile(
@@ -114,8 +116,8 @@ class DrawerUI extends StatelessWidget {
   }
 
   void logOutApp(BuildContext context) {
-      Navigator.of(context).pop();
-      Navigator.of(context).pushReplacementNamed('/');
-      Provider.of<Auth>(context, listen: false).logout();
+    Navigator.of(context).pop();
+    Navigator.of(context).pushReplacementNamed('/');
+    Provider.of<Auth>(context, listen: false).logout();
   }
 }

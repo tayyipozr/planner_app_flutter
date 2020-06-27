@@ -7,7 +7,9 @@ import './screens/myDailyPlans_screen.dart';
 import './screens/myHabits_screen.dart';
 import './screens/login_screen.dart';
 import './screens/books_to_read_screen.dart';
+import 'helpers/custom_route.dart';
 import 'screens/book_details_screen.dart';
+import 'screens/places_to_go_screen.dart';
 import 'screens/register_screen.dart';
 import './screens/splash_screen.dart';
 
@@ -43,20 +45,23 @@ class MyApp extends StatelessWidget {
         builder: (BuildContext context, Auth auth, Widget _) => MaterialApp(
           title: 'Flutter Demo',
           theme: ThemeData(
-            primaryColor: Color(0xFFFF9AA2),
-            primaryColorDark: Colors.blueGrey,
-            visualDensity: VisualDensity.adaptivePlatformDensity,
-          ),
-          home: auth.isAuth
-              ? PageControlScreen()
-              : FutureBuilder(
-                  future: auth.tryAutoLogin(),
-                  builder: (ctx, authResultSnapShot) =>
-                      authResultSnapShot.connectionState ==
-                              ConnectionState.waiting
-                          ? SplashScreen()
-                          : LoginScreen(),
-                ),
+              primaryColor: Color(0xFFFF9AA2),
+              primaryColorDark: Colors.blueGrey,
+              visualDensity: VisualDensity.adaptivePlatformDensity,
+              pageTransitionsTheme: PageTransitionsTheme(builders: {
+                TargetPlatform.android: CustomPageTransitionBuilder(),
+                TargetPlatform.iOS: CustomPageTransitionBuilder(),
+              })),
+          home: PlacesToGoScreen(), //auth.isAuth
+          //     ? PageControlScreen()
+          //     : FutureBuilder(
+          //         future: auth.tryAutoLogin(),
+          //         builder: (ctx, authResultSnapShot) =>
+          //             authResultSnapShot.connectionState ==
+          //                     ConnectionState.waiting
+          //                 ? SplashScreen()
+          //                 : LoginScreen(),
+          //       ),
           routes: {
             HomeScreen.routeName: (ctx) => HomeScreen(),
             PageControlScreen.routeName: (ctx) => PageControlScreen(),
