@@ -1,40 +1,36 @@
-import 'package:flutter/material.dart';
-import '../helpers/http_helper.dart';
+import 'dart:convert';
 
-import '../models/place.dart';
+import 'package:http/http.dart' as http;
 
-class Place with ChangeNotifier {
-  final String authToken;
-  final String userId;
-  Map<String, PlaceItem> _items = {};
-
-  Place.create(this.authToken, this.userId);
-  Place.update(this.authToken, this.userId, this._items);
-
-  Future<void> fetchAndSetPlaces() async {
+class MyHttp {
+  static Future<List<dynamic>> fetch(
+      String authToken, String databaseModel) async {
+    final url = 'http://10.0.2.2:3000/$databaseModel';
+    print(authToken);
     try {
-      final extractedData = await MyHttp.fetch(authToken, 'places');
-      print(extractedData);
-      final Map<String, PlaceItem> loadedProduct = {};
-      extractedData.forEach((place) {
-        loadedProduct[place['id'].toString()] = PlaceItem(
-          id: place['id'].toString(),
-          name: place['name'],
-          belong: place['belong'],
-        );
-      });
-      _items = loadedProduct;
-      notifyListeners();
+      final response = await http.get(
+        url,
+        headers: <String, String>{'Authorization': 'Bearer $authToken'},
+      );
+      {
+        if (authToken != null) {
+          final extractedData = json.decode(response.body) as List<dynamic>;
+          print(extractedData);
+          return extractedData;
+        } else {
+          throw Error();
+        }
+      }
     } catch (err) {
       print(err);
       throw (err);
     }
   }
-
-  Map<String, PlaceItem> get items {
-    return {..._items};
-  }
 }
+//   Map<String, PlaceItem> get items {
+//     return {..._items};
+//   }
+
 //   int get itemCount {
 //     return _items.length;
 //   }

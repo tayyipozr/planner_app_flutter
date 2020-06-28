@@ -1,11 +1,11 @@
 class PlaceItem {
   final String id;
-  final String title;
-  final String imageUrl;
+  final String name;
+  final int belong;
 
   PlaceItem({
     this.id,
-    this.imageUrl,
-    this.title,
+    this.belong,
+    this.name,
   });
 }

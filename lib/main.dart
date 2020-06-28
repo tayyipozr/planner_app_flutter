@@ -8,6 +8,7 @@ import './screens/myHabits_screen.dart';
 import './screens/login_screen.dart';
 import './screens/books_to_read_screen.dart';
 import 'helpers/custom_route.dart';
+import 'providers/place_provider.dart';
 import 'screens/book_details_screen.dart';
 import 'screens/places_to_go_screen.dart';
 import 'screens/register_screen.dart';
@@ -40,6 +41,12 @@ class MyApp extends StatelessWidget {
               Book.update(auth.token, auth.userId,
                   previous == null ? {} : previous.items),
         ),
+        ChangeNotifierProxyProvider<Auth, Place>(
+          create: (BuildContext context) => Place.create("", ""),
+          update: (BuildContext context, Auth auth, Place previous) =>
+              Place.update(auth.token, auth.userId,
+                  previous == null ? {} : previous.items),
+        ),
       ],
       child: Consumer<Auth>(
         builder: (BuildContext context, Auth auth, Widget _) => MaterialApp(
@@ -52,16 +59,16 @@ class MyApp extends StatelessWidget {
                 TargetPlatform.android: CustomPageTransitionBuilder(),
                 TargetPlatform.iOS: CustomPageTransitionBuilder(),
               })),
-          home: PlacesToGoScreen(), //auth.isAuth
-          //     ? PageControlScreen()
-          //     : FutureBuilder(
-          //         future: auth.tryAutoLogin(),
-          //         builder: (ctx, authResultSnapShot) =>
-          //             authResultSnapShot.connectionState ==
-          //                     ConnectionState.waiting
-          //                 ? SplashScreen()
-          //                 : LoginScreen(),
-          //       ),
+          home: auth.isAuth
+              ? PageControlScreen()
+              : FutureBuilder(
+                  future: auth.tryAutoLogin(),
+                  builder: (ctx, authResultSnapShot) =>
+                      authResultSnapShot.connectionState ==
+                              ConnectionState.waiting
+                          ? SplashScreen()
+                          : LoginScreen(),
+                ),
           routes: {
             HomeScreen.routeName: (ctx) => HomeScreen(),
             PageControlScreen.routeName: (ctx) => PageControlScreen(),
