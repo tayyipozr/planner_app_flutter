@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
                 TargetPlatform.iOS: CustomPageTransitionBuilder(),
               })),
           home: auth.isAuth
-              ? PageControlScreen()
+              ? PlacesToGoScreen()
               : FutureBuilder(
                   future: auth.tryAutoLogin(),
                   builder: (ctx, authResultSnapShot) =>

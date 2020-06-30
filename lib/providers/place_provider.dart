@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import '../helpers/http_helper.dart';
 
@@ -34,47 +36,35 @@ class Place with ChangeNotifier {
   Map<String, PlaceItem> get items {
     return {..._items};
   }
-}
-//   int get itemCount {
-//     return _items.length;
-//   }
 
-//   Future<void> add({String name, DateTime dueDate, IconData icon}) async {
-//     final url = 'http://10.0.2.2:3000/habits/$authToken';
-//     final timelapse = DateTime.now();
-//     try {
-//       final response = await http.post(
-//         url,
-//         headers: <String, String>{
-//           'Content-Type': 'application/json; charset=UTF-8',
-//           'Authorization': 'Bearer $authToken'
-//         },
-//         body: jsonEncode(<String, String>{
-//           'name': name,
-//           'start': timelapse.toIso8601String(),
-//           'due': dueDate.toIso8601String()
-//         }),
-//       );
-//       print(response.body);
-//       _items.putIfAbsent(
-//         response.body,
-//         () => PlaceItem(
-//           id: response.body,
-//           name: name,
-//           dueDate: dueDate,
-//           start: timelapse,
-//           icon: Icon(icon),
-//         ),
-//       );
-//       notifyListeners();
-//     } catch (err) {
-//       print(err);
-//       throw err;
-//     }
-//   }
+  int get itemCount {
+    return _items.length;
+  }
 
-//   @override
-//   notifyListeners();
+  Future<void> add({String name, int belong}) async {
+    final body = jsonEncode(<String, dynamic>{
+      'name': name,
+      'belong': belong,
+    });
+    try {
+      final response = await MyHttp.post(authToken, 'places', body);
+      _items.putIfAbsent(
+        response,
+        () => PlaceItem(
+          id: response,
+          belong: belong,
+          name: name,
+        ),
+      );
+      notifyListeners();
+    } catch (err) {
+      print(err);
+      throw err;
+    }
+  }
+
+  @override
+  notifyListeners();
 
 //   Future<void> updateItem(PlaceItem habitItem) async {
 //     try {
@@ -108,23 +98,20 @@ class Place with ChangeNotifier {
 //     }
 //   }
 
-//   void removeItem(String habitId) {
-//     final url = 'http://10.0.2.2:3000/habits/$authToken/$habitId';
-//     final existingHabitKey = _items.keys.firstWhere((key) => key == habitId);
-//     var existingHabit = items[existingHabitKey];
-//     _items.removeWhere((key, value) => key == habitId);
-//     notifyListeners();
-//     http.delete(url, headers: <String, String>{
-//       'Authorization': 'Bearer $authToken'
-//     }).then((_) {
-//       existingHabit = null;
-//     }).catchError((err) {
-//       _items[existingHabitKey] = existingHabit;
-//       print(err);
-//       throw err;
-//     });
-//   }
-
+  void removeItem(String placeId) {
+    final existingPlaceKey = _items.keys.firstWhere((key) => key == placeId);
+    var existingPlace = items[existingPlaceKey];
+    _items.removeWhere((key, value) => key == placeId);
+    notifyListeners();
+    MyHttp.delete(authToken, placeId).then((_) {
+      existingPlace = null;
+    }).catchError((err) {
+      _items[existingPlaceKey] = existingPlace;
+      print(err);
+      throw err;
+    });
+  }
+}
 //   void clear() {
 //     _items = {};
 //     notifyListeners();
