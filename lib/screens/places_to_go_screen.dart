@@ -80,6 +80,7 @@ class _PlacesToGoScreenState extends State<PlacesToGoScreen>
 
     return Scaffold(
       appBar: AppBar(
+        title: Text("Places To Go"),
         leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),
             onPressed: () {

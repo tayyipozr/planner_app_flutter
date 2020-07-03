@@ -1,13 +1,7 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import '../providers/auth.dart';
 import 'package:provider/provider.dart';
 import '../screens/register_screen.dart';
-
-import 'page_control_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   final form = GlobalKey<FormState>();

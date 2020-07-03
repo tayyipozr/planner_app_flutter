@@ -3,7 +3,7 @@ import 'package:planner_app/screens/books_to_read_screen.dart';
 import 'package:planner_app/screens/places_to_go_screen.dart';
 
 import 'home_screen.dart';
-import 'myDailyPlans_screen.dart';
+import 'my_daily_routines_screen.dart';
 import 'myHabits_screen.dart';
 
 class PageControlScreen extends StatelessWidget {
@@ -11,7 +11,7 @@ class PageControlScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pageController = PageController();    
+    final pageController = PageController();
     return PageView(
       controller: pageController,
       scrollDirection: Axis.horizontal,
@@ -26,7 +26,7 @@ class PageControlScreen extends StatelessWidget {
         //     Scaffold(body: Center(child: Text("3")), backgroundColor: Colors.green),
         //   ],
         // ),
-        MyDailyPlansScreen(),
+        MyDailyRoutinesScreen(),
         BooksToRead(),
         PlacesToGoScreen(),
       ],

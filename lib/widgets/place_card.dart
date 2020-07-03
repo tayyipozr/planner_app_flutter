@@ -177,29 +177,12 @@ class _CustomCardState extends State<PlaceCard> with TickerProviderStateMixin {
                 child: Column(
                   children: [
                     Container(
-                      width: width / 5,
-                      height: height / 20,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Container(
-                            width: width / 6,
-                            child: Text(
-                              "${widget.cardTitle}",
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          Container(
-                            width: width / 30,
-                            child: IconButton(
-                              alignment: Alignment.center,
-                              padding: EdgeInsets.all(2),
-                              iconSize: 14,
-                              icon: Icon(Icons.file_upload),
-                              onPressed: () {},
-                            ),
-                          ),
-                        ],
+                      child: Container(
+                        width: width / 6,
+                        child: Text(
+                          "${widget.cardTitle}",
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                     ),
                     Divider(
@@ -215,6 +198,7 @@ class _CustomCardState extends State<PlaceCard> with TickerProviderStateMixin {
                         itemBuilder: (ctx, idx) => Padding(
                           padding: const EdgeInsets.only(top: 2.0, left: 10.0),
                           child: Dismissible(
+                            direction: DismissDirection.startToEnd,
                             key: Key(data[idx].id),
                             background: Container(
                               alignment: Alignment.centerLeft,
@@ -224,16 +208,7 @@ class _CustomCardState extends State<PlaceCard> with TickerProviderStateMixin {
                                 color: Colors.red,
                               ),
                             ),
-                            secondaryBackground: Container(
-                              padding: EdgeInsets.only(right: width / 40),
-                              alignment: Alignment.centerRight,
-                              child: Icon(
-                                Icons.check_circle_outline,
-                                size: height / 45,
-                                color: Colors.green,
-                              ),
-                            ),
-                            onDismissed: (direction) {
+                            onDismissed: (direction) async {
                               if (direction == DismissDirection.startToEnd) {
                                 Scaffold.of(context).showSnackBar(
                                   //place.removeItem(data[idx].id);
@@ -249,31 +224,72 @@ class _CustomCardState extends State<PlaceCard> with TickerProviderStateMixin {
                                   ),
                                 );
                               }
-                              if (direction == DismissDirection.endToStart) {
-                                //place.isVisited == true
-                                Scaffold.of(context).showSnackBar(
-                                  //place.removeItem(data[idx].id);
-                                  SnackBar(
-                                    content: Text(
-                                        "${data[idx].name} added to places i visit."),
-                                    action: SnackBarAction(
-                                      label: "UNDO",
-                                      onPressed: () {},
-                                    ),
-                                  ),
-                                );
-                              }
                             },
                             child: Container(
                               width: width / 3,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    "${(idx + 1).toString()} - " +
-                                        "${data[idx].name}",
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(fontSize: 10),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "${(idx + 1).toString()} - " +
+                                            "${data[idx].name}",
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(fontSize: 10),
+                                      ),
+                                      data[idx].visited
+                                          ? Container(
+                                              height: height / 40,
+                                              width: width / 30,
+                                              child: IconButton(
+                                                padding: EdgeInsets.all(0),
+                                                icon: Icon(Icons.check_circle,
+                                                    size: 14,
+                                                    color: Colors.green),
+                                                onPressed: () async {
+                                                  await place.updateItem(
+                                                      data[idx].id, false);
+                                                  print(data[idx].visited);
+                                                  Scaffold.of(context)
+                                                      .showSnackBar(
+                                                    //place.removeItem(data[idx].id);
+                                                    SnackBar(
+                                                      content: Text(
+                                                          "${data[idx].name} removed from places i visit."),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            )
+                                          : Container(
+                                              height: height / 40,
+                                              width: width / 30,
+                                              child: IconButton(
+                                                padding: EdgeInsets.all(0),
+                                                icon: Icon(
+                                                    Icons.check_circle_outline,
+                                                    size: 14,
+                                                    color: Colors.white),
+                                                onPressed: () async {
+                                                  await place.updateItem(
+                                                      data[idx].id, true);
+
+                                                  print(data[idx].visited);
+                                                  Scaffold.of(context)
+                                                      .showSnackBar(
+                                                    //place.removeItem(data[idx].id);
+                                                    SnackBar(
+                                                      content: Text(
+                                                          "${data[idx].name} added to places i visit."),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            )
+                                    ],
                                   ),
                                   Divider(
                                     height: 2,

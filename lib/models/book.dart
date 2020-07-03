@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class BookItem {
   final String id;
   final String name;

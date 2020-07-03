@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../screens/page_control_screen.dart';
+import 'page_control_screen.dart';
 
-
-class MyDailyPlansScreen extends StatelessWidget {
-  static const routeName = "/my-daily-plans";
+class MyDailyRoutinesScreen extends StatelessWidget {
+  static const routeName = "/my-daily-routines";
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +14,11 @@ class MyDailyPlansScreen extends StatelessWidget {
           leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),
             onPressed: () {
-              Navigator.pushReplacementNamed(context, PageControlScreen.routeName);
+              Navigator.pushReplacementNamed(
+                  context, PageControlScreen.routeName);
             },
           ),
-          title: Text("My Daily Plans Screen"),
+          title: Text("My Daily Routines"),
           centerTitle: true,
         ),
       ),

@@ -15,7 +15,6 @@ class MyHttp {
       {
         if (authToken != null) {
           final extractedData = json.decode(response.body) as List<dynamic>;
-          print(extractedData);
           return extractedData;
         } else {
           throw Error();
@@ -49,37 +48,23 @@ class MyHttp {
 //   @override
 //   notifyListeners();
 
-//   Future<void> updateItem(PlaceItem habitItem) async {
-//     try {
-//       final url = 'http://10.0.2.2:3000/habits/$authToken/${habitItem.id}';
-//       await http.patch(
-//         url,
-//         headers: <String, String>{
-//           'Content-Type': 'application/json; charset=UTF-8',
-//           'Authorization': 'Bearer $authToken'
-//         },
-//         body: jsonEncode(<String, String>{
-//           'name': habitItem.name,
-//           'start': habitItem.start.toIso8601String(),
-//           'due': habitItem.dueDate.toIso8601String(),
-//         }),
-//       );
-//       _items.update(
-//         habitItem.id,
-//         (existing) => PlaceItem(
-//           name: habitItem.name,
-//           dueDate: habitItem.dueDate,
-//           icon: habitItem.icon,
-//           id: habitItem.id,
-//           start: habitItem.start,
-//         ),
-//       );
-//       notifyListeners();
-//     } catch (err) {
-//       print(err);
-//       throw err;
-//     }
-//   }
+  static Future<void> patch(
+      String authToken, String databaseModel, String body, String id) async {
+    try {
+      final url = 'http://10.0.2.2:3000/$databaseModel/$id';
+      await http.patch(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $authToken'
+        },
+        body: body,
+      );
+    } catch (err) {
+      print(err);
+      throw err;
+    }
+  }
 
   static Future<void> delete(String authToken, String id) async {
     final url = 'http://10.0.2.2:3000/habits/$id';

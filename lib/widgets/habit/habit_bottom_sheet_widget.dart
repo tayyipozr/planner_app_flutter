@@ -4,6 +4,7 @@ import 'package:planner_app/models/habit.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/habit_provider.dart';
+import '../../helpers/notification_helper.dart';
 
 class HabitBottomSheet extends StatefulWidget {
   final String id;

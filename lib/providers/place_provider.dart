@@ -20,10 +20,10 @@ class Place with ChangeNotifier {
       final Map<String, PlaceItem> loadedProduct = {};
       extractedData.forEach((place) {
         loadedProduct[place['id'].toString()] = PlaceItem(
-          id: place['id'].toString(),
-          name: place['name'],
-          belong: place['belong'],
-        );
+            id: place['id'].toString(),
+            name: place['name'],
+            belong: place['belong'],
+            visited: place['visited'] == 0 ? false : true);
       });
       _items = loadedProduct;
       notifyListeners();
@@ -66,37 +66,27 @@ class Place with ChangeNotifier {
   @override
   notifyListeners();
 
-//   Future<void> updateItem(PlaceItem habitItem) async {
-//     try {
-//       final url = 'http://10.0.2.2:3000/habits/$authToken/${habitItem.id}';
-//       await http.patch(
-//         url,
-//         headers: <String, String>{
-//           'Content-Type': 'application/json; charset=UTF-8',
-//           'Authorization': 'Bearer $authToken'
-//         },
-//         body: jsonEncode(<String, String>{
-//           'name': habitItem.name,
-//           'start': habitItem.start.toIso8601String(),
-//           'due': habitItem.dueDate.toIso8601String(),
-//         }),
-//       );
-//       _items.update(
-//         habitItem.id,
-//         (existing) => PlaceItem(
-//           name: habitItem.name,
-//           dueDate: habitItem.dueDate,
-//           icon: habitItem.icon,
-//           id: habitItem.id,
-//           start: habitItem.start,
-//         ),
-//       );
-//       notifyListeners();
-//     } catch (err) {
-//       print(err);
-//       throw err;
-//     }
-//   }
+  Future<void> updateItem(String id, bool visited) async {
+    final String body = jsonEncode(<String, int>{
+      'visited': visited == true ? 1 : 0,
+    });
+    try {
+      await MyHttp.patch(authToken, 'places', body, id);
+      _items.update(
+        id,
+        (existing) => PlaceItem(
+          name: existing.name,
+          belong: existing.belong,
+          id: existing.id,
+          visited: visited,
+        ),
+      );
+      notifyListeners();
+    } catch (err) {
+      print(err);
+      throw err;
+    }
+  }
 
   void removeItem(String placeId) {
     final existingPlaceKey = _items.keys.firstWhere((key) => key == placeId);

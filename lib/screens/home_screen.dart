@@ -14,11 +14,10 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-
 class _HomeScreenState extends State<HomeScreen> {
   var _isInit = true;
   var _isLoading = false;
-  
+
   @override
   void didChangeDependencies() {
     if (_isInit) {
@@ -81,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: EdgeInsets.only(
                         top: 5,
                       ),
-                      child: Text("title"),
+                      child: Text("HABITS"),
                     ),
                     Container(
                       alignment: Alignment.center,
@@ -97,6 +96,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             return HabitInfoCard();
                           }),
                     ),
+                    Container(
+                      child: Text("PLACES I VISIT"),
+                    )
                     // FlatButton(
                     //   child: Text("pk"),
                     //   onPressed: () {

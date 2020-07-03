@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 
+import '../helpers/notification_helper.dart';
 import '../models/habit.dart';
 
 class Habit with ChangeNotifier {
@@ -54,7 +56,11 @@ class Habit with ChangeNotifier {
     return _items.length;
   }
 
-  Future<void> add({String name, DateTime dueDate, IconData icon}) async {
+  Future<void> add(
+      {String name,
+      DateTime dueDate,
+      IconData icon,
+      BuildContext context}) async {
     final url = 'http://10.0.2.2:3000/habits/$authToken';
     final timelapse = DateTime.now();
     try {
@@ -70,17 +76,30 @@ class Habit with ChangeNotifier {
           'due': dueDate.toIso8601String()
         }),
       );
-      print(response.body);
+
+      final decodedId = jsonDecode(response.body)['insertId'];
       _items.putIfAbsent(
-        response.body,
+        decodedId.toString(),
         () => HabitItem(
-          id: response.body,
+          id: decodedId.toString(),
           name: name,
           dueDate: dueDate,
           start: timelapse,
           icon: Icon(icon),
         ),
       );
+      Notifications.initialization(context);
+      Notifications.initializeNotification(
+          "HabitChannelId", "Habits", "Notifications Of Habits");
+      await Notifications.show(decodedId, name, "It is a habit show");
+      print("phase 2");
+      await Notifications.periodicallyShow(
+          decodedId, name, "It is a habit periodicly", RepeatInterval.Daily);
+      await Notifications.showDailyAtTime(
+          decodedId,
+          timelapse.add(Duration(seconds: 10)),
+          name,
+          "It is a habit show daily at time (ten seconds after)");
       notifyListeners();
     } catch (err) {
       print(err);
@@ -142,6 +161,7 @@ class Habit with ChangeNotifier {
 
   void clear() {
     _items = {};
+    Notifications.cancelAll();
     notifyListeners();
   }
 }

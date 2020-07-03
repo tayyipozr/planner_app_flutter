@@ -1,12 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:planner_app/helpers/custom_route.dart';
 import 'package:planner_app/providers/auth.dart';
 import 'package:provider/provider.dart';
 
 import '../screens/books_to_read_screen.dart';
 import '../screens/myHabits_screen.dart';
-import '../screens/myDailyPlans_screen.dart';
+import '../screens/my_daily_routines_screen.dart';
 
 class DrawerUI extends StatelessWidget {
   @override
@@ -57,7 +56,7 @@ class DrawerUI extends StatelessWidget {
                     onTap: () {
                       Provider.of<Auth>(context, listen: false).tryAutoLogin();
                       Navigator.popAndPushNamed(
-                          context, MyDailyPlansScreen.routeName);
+                          context, MyDailyRoutinesScreen.routeName);
                     },
                   ),
                   ListTile(
