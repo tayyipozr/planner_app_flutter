@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:planner_app/app_localizations.dart';
 import 'package:planner_app/providers/auth.dart';
 import 'package:provider/provider.dart';
 
@@ -13,6 +14,13 @@ class DrawerUI extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final menuItemHabit = AppLocalizations.of(context).translate("habit-page");
+    final menuItemDaily =
+        AppLocalizations.of(context).translate("daily-routine-page");
+    final menuItemBook =
+        AppLocalizations.of(context).translate("yearly-book-page");
+    final menuItemLast =
+        AppLocalizations.of(context).translate("drawer-items").split(',');
     return SafeArea(
       child: Drawer(
         elevation: 10,
@@ -46,7 +54,7 @@ class DrawerUI extends StatelessWidget {
                 children: <Widget>[
                   ListTile(
                     leading: Icon(Icons.loop),
-                    title: Text("My Habits"),
+                    title: Text(menuItemHabit),
                     onTap: () {
                       Navigator.popAndPushNamed(
                           context, MyHabitsScreen.routeName);
@@ -55,7 +63,7 @@ class DrawerUI extends StatelessWidget {
                   ),
                   ListTile(
                     leading: Icon(Icons.timelapse),
-                    title: Text("My Daily Plans"),
+                    title: Text(menuItemDaily),
                     onTap: () {
                       Provider.of<Auth>(context, listen: false).tryAutoLogin();
                       Navigator.popAndPushNamed(
@@ -74,7 +82,7 @@ class DrawerUI extends StatelessWidget {
                   ),
                   ListTile(
                     leading: Icon(Icons.calendar_today),
-                    title: Text("Reading Book"),
+                    title: Text(menuItemBook),
                     onTap: () {
                       Navigator.popAndPushNamed(context, BooksToRead.routeName);
                     },
@@ -95,17 +103,17 @@ class DrawerUI extends StatelessWidget {
                   ),
                   ListTile(
                     leading: Icon(Icons.settings),
-                    title: Text("Settings"),
+                    title: Text(menuItemLast[0]),
                     onTap: () => {},
                   ),
                   ListTile(
                     leading: Icon(Icons.exit_to_app),
-                    title: Text("Logout"),
+                    title: Text(menuItemLast[1]),
                     onTap: () => logOutApp(context),
                   ),
                   ListTile(
                     leading: Icon(Icons.power_settings_new),
-                    title: Text("Exit"),
+                    title: Text(menuItemLast[2]),
                     onTap: () => exit(0),
                   ),
                 ],

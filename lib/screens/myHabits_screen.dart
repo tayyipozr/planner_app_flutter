@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:planner_app/app_localizations.dart';
 
 import '../widgets/habit/habit_bottom_sheet_widget.dart';
 import '../widgets/habit/habit_item_widget.dart';
@@ -14,7 +15,7 @@ class MyHabitsScreen extends StatelessWidget {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          title: Text("My Habits Screen"),
+          title: Text(AppLocalizations.of(context).translate('habit-page')),
           centerTitle: true,
           leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),

@@ -95,64 +95,67 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
               Container(
                 padding: EdgeInsets.only(top: 10),
                 alignment: Alignment.topCenter,
-                child: Container(
-                  height: MediaQuery.of(context).size.height / 3,
-                  width: MediaQuery.of(context).size.width - 50,
-                  padding: EdgeInsets.only(right: 15),
-                  decoration: BoxDecoration(
-                    color: Color(0xFFB5EAD7),
-                    borderRadius: BorderRadius.circular(22),
-                  ),
+                child: Hero(
+                  tag: bookId,
                   child: Container(
+                    height: MediaQuery.of(context).size.height / 3,
+                    width: MediaQuery.of(context).size.width - 50,
+                    padding: EdgeInsets.only(right: 15),
                     decoration: BoxDecoration(
-                        color: Color(0xFFFFDAC1),
-                        borderRadius: BorderRadius.circular(22)),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Text("Author : " + bookItem.author),
-                        Divider(),
-                        Text("Page :" + bookItem.page.toString()),
-                        Divider(),
-                        Text("Start Date :" +
-                            DateFormat.yMd().format(bookItem.start)),
-                        Divider(),
-                        Text("Due Date :" +
-                            DateFormat.yMd().format(bookItem.dueDate)),
-                        Divider(),
-                        Container(
-                          alignment: Alignment.center,
-                          height: MediaQuery.of(context).size.height / 25,
-                          width: MediaQuery.of(context).size.width / 3,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: ratingList.length,
-                            itemBuilder: (ctx, idx) {
-                              return InkWell(
-                                onTap: () {
-                                  print(ratingList[idx]);
-                                  setState(() {
-                                    if (ratingList[idx])
-                                      book.updateItem(BookItem(
-                                          id: bookId,
-                                          rating: ++bookItem.rating));
-                                    else
-                                      book.updateItem(BookItem(
-                                          id: bookId,
-                                          rating: --bookItem.rating));
-                                  });
-                                  print(ratingList[idx]);
-                                },
-                                child: Icon(
-                                  ratingList[idx]
-                                      ? Icons.star_border
-                                      : Icons.star,
-                                ),
-                              );
-                            },
+                      color: Color(0xFFB5EAD7),
+                      borderRadius: BorderRadius.circular(22),
+                    ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Color(0xFFFFDAC1),
+                          borderRadius: BorderRadius.circular(22)),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Text("Author : " + bookItem.author),
+                          Divider(),
+                          Text("Page :" + bookItem.page.toString()),
+                          Divider(),
+                          Text("Start Date :" +
+                              DateFormat.yMd().format(bookItem.start)),
+                          Divider(),
+                          Text("Due Date :" +
+                              DateFormat.yMd().format(bookItem.dueDate)),
+                          Divider(),
+                          Container(
+                            alignment: Alignment.center,
+                            height: MediaQuery.of(context).size.height / 25,
+                            width: MediaQuery.of(context).size.width / 3,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: ratingList.length,
+                              itemBuilder: (ctx, idx) {
+                                return InkWell(
+                                  onTap: () {
+                                    print(ratingList[idx]);
+                                    setState(() {
+                                      if (ratingList[idx])
+                                        book.updateItem(BookItem(
+                                            id: bookId,
+                                            rating: ++bookItem.rating));
+                                      else
+                                        book.updateItem(BookItem(
+                                            id: bookId,
+                                            rating: --bookItem.rating));
+                                    });
+                                    print(ratingList[idx]);
+                                  },
+                                  child: Icon(
+                                    ratingList[idx]
+                                        ? Icons.star_border
+                                        : Icons.star,
+                                  ),
+                                );
+                              },
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),

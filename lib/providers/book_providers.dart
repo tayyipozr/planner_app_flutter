@@ -116,7 +116,7 @@ class Book with ChangeNotifier {
       bookItem.start == null ? null : bookItem.start.toIso8601String(),
       bookItem.dueDate == null ? null : bookItem.start.toIso8601String(),
       bookItem.rating,
-      bookItem.isRead,
+      bookItem.isRead == true ? 1 : 0,
       bookItem.comment
     ];
     final str = [
@@ -150,14 +150,14 @@ class Book with ChangeNotifier {
         },
         body: jsonEncode(change),
       );
-      // print(response.body);
-      // final ex =
-      //     _items[_items.keys.firstWhere((element) => element == bookItem.id)];
-      // print(ex.rating);
-      // print(ex.name);
-      // print(ex.author);
-      // print(ex.dueDate);
-      // print(ex.start);
+      print(response.body);
+      final ex =
+          _items[_items.keys.firstWhere((element) => element == bookItem.id)];
+      print(ex.rating);
+      print(ex.name);
+      print(ex.author);
+      print(ex.dueDate);
+      print(ex.start);
       _items.update(
         bookItem.id,
         (existing) => BookItem(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:planner_app/app_localizations.dart';
 import 'package:planner_app/providers/dailyPlans_provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:planner_app/screens/my_daily_plans_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -67,6 +69,25 @@ class MyApp extends StatelessWidget {
                 TargetPlatform.android: CustomPageTransitionBuilder(),
                 TargetPlatform.iOS: CustomPageTransitionBuilder(),
               })),
+          supportedLocales: [
+            Locale('en', 'US'),
+            Locale('tr', 'TR'),
+          ],
+          localizationsDelegates: [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate
+          ],
+          localeResolutionCallback: (locale, supportedLocales) {
+            for (var supportedLocale in supportedLocales) {
+              if (supportedLocale.languageCode == locale.languageCode &&
+                  supportedLocale.countryCode == locale.countryCode) {
+                return supportedLocale;
+              }
+            }
+            return supportedLocales.first;
+          },
           home: auth.isAuth
               ? BooksToRead()
               : FutureBuilder(

@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:planner_app/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import '../screens/book_details_screen.dart';
@@ -45,25 +48,15 @@ class _BooksToReadState extends State<BooksToRead> {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
 
-    final months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "Novermber",
-      "December"
-    ];
+    // localizations
+    final title = AppLocalizations.of(context).translate('yearly-book-page');
+    final months = AppLocalizations.of(context).translate('months').split(",");
+    final tip = AppLocalizations.of(context).translate('book-page-tip');
 
     return Scaffold(
       backgroundColor: bookshelfColor,
       appBar: AppBar(
-        title: Text("Yearly Book Plan"),
+        title: Text(title),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
@@ -86,7 +79,7 @@ class _BooksToReadState extends State<BooksToRead> {
       ),
       body: Column(
         children: <Widget>[
-          Text("Tip : It is recommended to read 5 book a month."),
+          Text(tip),
           Expanded(
             child: ListView.builder(
               addAutomaticKeepAlives: true,
@@ -160,7 +153,7 @@ class _BooksToReadState extends State<BooksToRead> {
                                   scrollDirection: Axis.horizontal,
                                   itemCount: tempMonth.length,
                                   itemBuilder: (ctx, idx) {
-                                    return InkWell(
+                                    return GestureDetector(
                                       onDoubleTap: () {
                                         setState(() {
                                           book.updateItem(BookItem(
@@ -222,7 +215,7 @@ class _BooksToReadState extends State<BooksToRead> {
                                   scrollDirection: Axis.horizontal,
                                   itemCount: tempMonth.length,
                                   itemBuilder: (ctx, idx) {
-                                    return InkWell(
+                                    return GestureDetector(
                                       onDoubleTap: () {
                                         setState(() {
                                           book.updateItem(BookItem(
@@ -240,9 +233,12 @@ class _BooksToReadState extends State<BooksToRead> {
                                           ? Stack(
                                               alignment: Alignment.center,
                                               children: [
-                                                Image.asset(
-                                                  "assets/img/book_middle.png",
-                                                  width: width / 16,
+                                                Hero(
+                                                  tag: tempMonth[idx].id,
+                                                  child: Image.asset(
+                                                    "assets/img/book_middle.png",
+                                                    width: width / 16,
+                                                  ),
                                                 ),
                                                 RotatedBox(
                                                     quarterTurns: 3,

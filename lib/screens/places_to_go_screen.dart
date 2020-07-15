@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:planner_app/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gifimage/flutter_gifimage.dart';
 
@@ -78,9 +79,13 @@ class _PlacesToGoScreenState extends State<PlacesToGoScreen>
     });
     print(datum);
 
+    final title = AppLocalizations.of(context).translate("places-page");
+    final cardTitles =
+        AppLocalizations.of(context).translate("places-titles").split(',');
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("Places To Go"),
+        title: Text(title),
         leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),
             onPressed: () {
@@ -138,11 +143,11 @@ class _PlacesToGoScreenState extends State<PlacesToGoScreen>
                       PlaceCard(0, datum[0], FractionalOffset.topLeft,
                           _backScale, _frontScale,
                           padding: height / 20,
-                          cardTitle: "Europe",
+                          cardTitle: cardTitles[0],
                           imageUrl: "assets/img/continents/europe.png"),
                       PlaceCard(1, datum[1], FractionalOffset.topCenter,
                           _backScale, _frontScale,
-                          cardTitle: "Asia",
+                          cardTitle: cardTitles[1],
                           imageUrl: "assets/img/continents/asia.png"),
                       PlaceCard(
                         2,
@@ -151,7 +156,7 @@ class _PlacesToGoScreenState extends State<PlacesToGoScreen>
                         _backScale,
                         _frontScale,
                         padding: height / 20,
-                        cardTitle: "America",
+                        cardTitle: cardTitles[2],
                         imageUrl: "assets/img/continents/america.png",
                       ),
                     ],
@@ -166,16 +171,16 @@ class _PlacesToGoScreenState extends State<PlacesToGoScreen>
                     children: [
                       PlaceCard(3, datum[3], FractionalOffset.bottomLeft,
                           _backScale, _frontScale,
-                          cardTitle: "Oceania",
+                          cardTitle: cardTitles[3],
                           imageUrl: "assets/img/continents/australia.png"),
                       PlaceCard(4, datum[4], FractionalOffset.bottomCenter,
                           _backScale, _frontScale,
                           padding: height / 10,
-                          cardTitle: "South America",
+                          cardTitle: cardTitles[4],
                           imageUrl: "assets/img/continents/south_america.png"),
                       PlaceCard(5, datum[5], FractionalOffset.bottomRight,
                           _backScale, _frontScale,
-                          cardTitle: "Africa",
+                          cardTitle: cardTitles[5],
                           imageUrl: "assets/img/continents/africa.png")
                     ],
                   ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:planner_app/app_localizations.dart';
 import 'package:planner_app/providers/auth.dart';
 import 'package:provider/provider.dart';
 
@@ -42,12 +43,14 @@ class _HomeScreenState extends State<HomeScreen> {
     List<HabitItem> habits = habit.items.values.toList();
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+    final welcome =
+        AppLocalizations.of(context).translate('welcome').split(',');
 
     return DefaultTabController(
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Home Page"),
+          title: Text(AppLocalizations.of(context).translate('home-page')),
           elevation: 0,
         ),
         drawer: DrawerUI(auth.nick),
@@ -68,10 +71,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   child: Text(
                     DateTime.now().hour < 12
-                        ? "Günaydın ${auth.nick}"
+                        ? "${welcome[0]} ${auth.nick}"
                         : DateTime.now().hour < 18
-                            ? "Tünaydın ${auth.nick}"
-                            : "İyi Akşamlar ${auth.nick}",
+                            ? "${welcome[1]} ${auth.nick}"
+                            : "${welcome[2]} ${auth.nick}",
                     style:
                         TextStyle(fontSize: 35, fontFamily: "RobotoCondensed"),
                   ),

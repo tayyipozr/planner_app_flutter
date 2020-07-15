@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:planner_app/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:show_up_animation/show_up_animation.dart';
 
@@ -36,6 +37,7 @@ class _MyDailyPlansScreenState extends State<MyDailyPlansScreen> {
   Widget build(BuildContext context) {
     final dailyPlan = Provider.of<DailyPlans>(context);
     DailyPlanItem todayPlanItem = dailyPlan.getDaily(_dateTime);
+    final title = AppLocalizations.of(context).translate('daily-plans');
     Map<String, String> changedDailyPlans = {
       "tzone0": null,
       "tzone1": null,
@@ -96,7 +98,7 @@ class _MyDailyPlansScreenState extends State<MyDailyPlansScreen> {
         backgroundColor: Theme.of(context).primaryColor,
         toolbarHeight: height / 5.7,
         centerTitle: true,
-        title: Text("My daily plans"),
+        title: Text(title),
         leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),
             onPressed: () {

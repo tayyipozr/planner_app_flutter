@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:planner_app/app_localizations.dart';
 
 import 'page_control_screen.dart';
 
@@ -18,7 +19,8 @@ class MyDailyRoutinesScreen extends StatelessWidget {
                   context, PageControlScreen.routeName);
             },
           ),
-          title: Text("My Daily Routines"),
+          title: Text(
+              AppLocalizations.of(context).translate('daily-routine-page')),
           centerTitle: true,
         ),
       ),
