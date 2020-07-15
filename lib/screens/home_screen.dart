@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:planner_app/providers/auth.dart';
 import 'package:provider/provider.dart';
 
 import '../models/habit.dart';
@@ -37,6 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final habit = Provider.of<Habit>(context);
+    final auth = Provider.of<Auth>(context);
     List<HabitItem> habits = habit.items.values.toList();
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
@@ -48,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
           title: Text("Home Page"),
           elevation: 0,
         ),
-        drawer: DrawerUI(),
+        drawer: DrawerUI(auth.nick),
         body: Container(
           height: height / 1.15,
           child: SingleChildScrollView(
@@ -56,12 +58,22 @@ class _HomeScreenState extends State<HomeScreen> {
               children: <Widget>[
                 Container(
                   height: MediaQuery.of(context).size.height / 4,
+                  width: width,
                   decoration: BoxDecoration(
                     color: Theme.of(context).primaryColor,
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(30),
                       bottomRight: Radius.circular(30),
                     ),
+                  ),
+                  child: Text(
+                    DateTime.now().hour < 12
+                        ? "Günaydın ${auth.nick}"
+                        : DateTime.now().hour < 18
+                            ? "Tünaydın ${auth.nick}"
+                            : "İyi Akşamlar ${auth.nick}",
+                    style:
+                        TextStyle(fontSize: 35, fontFamily: "RobotoCondensed"),
                   ),
                 ),
                 Column(

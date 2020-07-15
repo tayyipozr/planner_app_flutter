@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
+import 'package:show_up_animation/show_up_animation.dart';
 
 import '../providers/dailyPlans_provider.dart';
 
@@ -15,11 +15,18 @@ class MyDailyPlansScreen extends StatefulWidget {
 class _MyDailyPlansScreenState extends State<MyDailyPlansScreen> {
   DateTime _dateTime = DateTime.now();
   bool _isInit = true;
+  bool _isLoading = false;
 
   @override
   void didChangeDependencies() {
     if (_isInit) {
+      setState(() {
+        _isLoading = true;
+      });
       Provider.of<DailyPlans>(context).fetchAndSetDailyPlans();
+      setState(() {
+        _isLoading = false;
+      });
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -29,6 +36,18 @@ class _MyDailyPlansScreenState extends State<MyDailyPlansScreen> {
   Widget build(BuildContext context) {
     final dailyPlan = Provider.of<DailyPlans>(context);
     DailyPlanItem todayPlanItem = dailyPlan.getDaily(_dateTime);
+    Map<String, String> changedDailyPlans = {
+      "tzone0": null,
+      "tzone1": null,
+      "tzone2": null,
+      "tzone3": null,
+      "tzone4": null,
+      "tzone5": null,
+      "tzone6": null,
+      "tzone7": null,
+      "tzone8": null,
+      "tzone9": null,
+    };
 
     List<Color> colorList = [
       Colors.orange,
@@ -74,31 +93,50 @@ class _MyDailyPlansScreenState extends State<MyDailyPlansScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: height / 7,
+        backgroundColor: Theme.of(context).primaryColor,
+        toolbarHeight: height / 5.7,
         centerTitle: true,
         title: Text("My daily plans"),
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, '/page-control');
+            }),
         actions: [
           IconButton(
             icon: Icon(Icons.arrow_downward),
-            onPressed: () {},
+            onPressed: () {
+              print(todayPlanItem);
+              print(dailyPlan.items);
+              if (dailyPlan.items.containsKey(_dateTime)) {
+                dailyPlan.updateItem(todayPlanItem.idAsDate.toIso8601String(),
+                    changedDailyPlans);
+              } else {
+                dailyPlan.add(_dateTime, changedDailyPlans);
+              }
+            },
           )
         ],
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(70.0),
-          child: SizedBox(
-            height: 70,
-            child: CupertinoDatePicker(
-                mode: CupertinoDatePickerMode.date,
-                initialDateTime: _dateTime,
-                onDateTimeChanged: (dateTime) {
-                  print(dateTime);
-                  print(_dateTime);
-                  setState(() {
-                    _dateTime = dateTime;
-                  });
-                }),
-          ),
-        ),
+        bottom: _isLoading
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : PreferredSize(
+                preferredSize: Size.fromHeight(70.0),
+                child: SizedBox(
+                  height: 70,
+                  child: CupertinoDatePicker(
+                      mode: CupertinoDatePickerMode.date,
+                      initialDateTime: _dateTime,
+                      onDateTimeChanged: (dateTime) {
+                        print(dateTime);
+                        print(_dateTime);
+                        setState(() {
+                          _dateTime = dateTime;
+                        });
+                      }),
+                ),
+              ),
       ),
       body: GestureDetector(
         onTap: () {
@@ -108,6 +146,7 @@ class _MyDailyPlansScreenState extends State<MyDailyPlansScreen> {
           }
         },
         child: Container(
+          color: Color(0xFFF3F5E5),
           padding: EdgeInsets.only(
               top: height / 100, left: width / 50, right: width / 50),
           child: ListView.builder(
@@ -121,12 +160,18 @@ class _MyDailyPlansScreenState extends State<MyDailyPlansScreen> {
                     ? Container(
                         height: height / 13,
                         width: width / 3,
+                        // child: ShowUpAnimation(
+                        //   animationDuration: Duration(seconds: 1),
+                        //   curve: Curves.bounceIn,
+                        //   direction: Direction.vertical,
+                        //   offset: -0.5,
                         child: TextFormField(
                           key: Key(todayPlanItem == null
                               ? " "
                               : todayPlanItem.idAsDate.toString()),
                           initialValue: plans.isEmpty ? "" : plans[idx],
-                          onChanged: (value) => plans[idx] = value,
+                          onChanged: (value) => changedDailyPlans[
+                              changedDailyPlans.keys.toList()[idx]] = value,
                           keyboardType: TextInputType.multiline,
                           maxLines: 2,
                           decoration: InputDecoration(
@@ -141,6 +186,7 @@ class _MyDailyPlansScreenState extends State<MyDailyPlansScreen> {
                                     BorderSide(color: colorList[idx % 4])),
                           ),
                         ),
+                        // ),
                       )
                     : Container(),
                 idx % 2 == 0
@@ -185,11 +231,18 @@ class _MyDailyPlansScreenState extends State<MyDailyPlansScreen> {
                     : Container(
                         height: height / 13,
                         width: width / 3,
+                        // child: ShowUpAnimation(
+                        //   animationDuration: Duration(seconds: 1),
+                        //   curve: Curves.bounceIn,
+                        //   direction: Direction.vertical,
+                        //   offset: 0.5,
                         child: TextFormField(
                           key: Key(todayPlanItem == null
                               ? " "
                               : todayPlanItem.idAsDate.toString()),
                           initialValue: plans.isEmpty ? "" : plans[idx],
+                          onChanged: (value) => changedDailyPlans[
+                              changedDailyPlans.keys.toList()[idx]] = value,
                           keyboardType: TextInputType.multiline,
                           maxLines: 2,
                           decoration: InputDecoration(
@@ -205,6 +258,7 @@ class _MyDailyPlansScreenState extends State<MyDailyPlansScreen> {
                           ),
                         ),
                       ),
+                // ),
               ],
             ),
           ),

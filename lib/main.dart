@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
         builder: (BuildContext context, Auth auth, Widget _) => MaterialApp(
           title: 'Flutter Demo',
           theme: ThemeData(
-              primaryColor: Color(0xFFFF9AA2),
+              primaryColor: Color(0xFF967BB6),
               primaryColorDark: Colors.blueGrey,
               visualDensity: VisualDensity.adaptivePlatformDensity,
               pageTransitionsTheme: PageTransitionsTheme(builders: {
@@ -68,7 +68,7 @@ class MyApp extends StatelessWidget {
                 TargetPlatform.iOS: CustomPageTransitionBuilder(),
               })),
           home: auth.isAuth
-              ? MyDailyPlansScreen()
+              ? BooksToRead()
               : FutureBuilder(
                   future: auth.tryAutoLogin(),
                   builder: (ctx, authResultSnapShot) =>

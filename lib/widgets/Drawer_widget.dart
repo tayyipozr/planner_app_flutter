@@ -8,13 +8,16 @@ import '../screens/myHabits_screen.dart';
 import '../screens/my_daily_routines_screen.dart';
 
 class DrawerUI extends StatelessWidget {
+  final nick;
+  DrawerUI(this.nick);
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Drawer(
         elevation: 10,
         child: Container(
-          color: Color(0xFFFB5EA7),
+          color: Theme.of(context).primaryColor,
           child: Column(
             children: <Widget>[
               SizedBox(
@@ -24,7 +27,7 @@ class DrawerUI extends StatelessWidget {
                 children: <Widget>[
                   ListTile(
                     leading: Icon(Icons.perm_identity),
-                    title: Text("Name"),
+                    title: Text(nick),
                     subtitle: Text("Bilgisayar mühendisi"),
                   ),
                   Divider(

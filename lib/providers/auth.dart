@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Auth with ChangeNotifier {
   String _token;
+  String _nick;
   DateTime _expiryDate;
   String _userId;
   Timer _authTimer;
@@ -27,6 +28,10 @@ class Auth with ChangeNotifier {
 
   String get userId {
     return isAuth == null ? null : _userId;
+  }
+
+  String get nick {
+    return _nick;
   }
 
   Future<void> register(
@@ -75,14 +80,16 @@ class Auth with ChangeNotifier {
         seconds:
             responseData['decoded']['exp'] - responseData['decoded']['iat'],
       ));
-      print('expirydate'+ _expiryDate.toString());
+      _nick = responseData['nick'];
+      print('expirydate' + _expiryDate.toString());
       _autoLogout();
       notifyListeners();
       final prefs = await SharedPreferences.getInstance();
       final userData = json.encode({
         'token': _token,
         'userId': _userId,
-        'expiryDate': _expiryDate.toIso8601String()
+        'expiryDate': _expiryDate.toIso8601String(),
+        'nick': _nick
       });
       prefs.setString('userData', userData);
     } catch (e) {
@@ -107,6 +114,7 @@ class Auth with ChangeNotifier {
     _token = extractedUserData['token'];
     _userId = extractedUserData['userId'];
     _expiryDate = expiryDate;
+    _nick = extractedUserData['nick'];
     notifyListeners();
     _autoLogout();
     return true;
@@ -116,6 +124,7 @@ class Auth with ChangeNotifier {
     _token = null;
     _userId = null;
     _expiryDate = null;
+    _nick = null;
     if (_authTimer != null) {
       _authTimer.cancel();
       _authTimer = null;
