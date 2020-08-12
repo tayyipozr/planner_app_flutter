@@ -72,7 +72,7 @@ class _HabitBottomSheetState extends State<HabitBottomSheet> {
                   child: ListView(
                     children: <Widget>[
                       Text(
-                        "Add a new habit",
+                        widget.fromEdit ? "Edit the habit" : "Add a new habit",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: "RobotoCondensed",

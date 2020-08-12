@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:planner_app/app_localizations.dart';
 import 'package:planner_app/providers/dailyPlans_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:planner_app/screens/manage_home.dart';
 import 'package:planner_app/screens/my_daily_plans_screen.dart';
+import 'package:planner_app/screens/profile_screen.dart';
 import 'package:provider/provider.dart';
 
-import './screens/page_control_screen.dart';
-import './screens/home_screen.dart';
+import 'screens/plan_control_screen.dart';
+import 'screens/home_screen.dart';
 import 'screens/my_daily_routines_screen.dart';
 import './screens/myHabits_screen.dart';
 import './screens/login_screen.dart';
@@ -89,7 +91,7 @@ class MyApp extends StatelessWidget {
             return supportedLocales.first;
           },
           home: auth.isAuth
-              ? BooksToRead()
+              ? ManageHomeScreen()
               : FutureBuilder(
                   future: auth.tryAutoLogin(),
                   builder: (ctx, authResultSnapShot) =>
@@ -99,8 +101,9 @@ class MyApp extends StatelessWidget {
                           : LoginScreen(),
                 ),
           routes: {
+            ManageHomeScreen.routeName: (ctx) => ManageHomeScreen(),
             HomeScreen.routeName: (ctx) => HomeScreen(),
-            PageControlScreen.routeName: (ctx) => PageControlScreen(),
+            PlanControlScreen.routeName: (ctx) => PlanControlScreen(),
             MyDailyRoutinesScreen.routeName: (ctx) => MyDailyRoutinesScreen(),
             MyHabitsScreen.routeName: (ctx) => MyHabitsScreen(),
             BooksToRead.routeName: (ctx) => BooksToRead(),

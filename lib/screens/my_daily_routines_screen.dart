@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:planner_app/app_localizations.dart';
 
-import 'page_control_screen.dart';
+import 'plan_control_screen.dart';
 
 class MyDailyRoutinesScreen extends StatelessWidget {
   static const routeName = "/my-daily-routines";
@@ -16,7 +16,7 @@ class MyDailyRoutinesScreen extends StatelessWidget {
             icon: Icon(Icons.arrow_back_ios),
             onPressed: () {
               Navigator.pushReplacementNamed(
-                  context, PageControlScreen.routeName);
+                  context, PlanControlScreen.routeName);
             },
           ),
           title: Text(

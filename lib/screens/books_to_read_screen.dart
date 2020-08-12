@@ -5,7 +5,7 @@ import 'package:planner_app/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import '../screens/book_details_screen.dart';
-import '../screens/page_control_screen.dart';
+import 'plan_control_screen.dart';
 
 import '../widgets/book_bottom_sheet.dart';
 
@@ -61,7 +61,7 @@ class _BooksToReadState extends State<BooksToRead> {
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
             Navigator.pushReplacementNamed(
-                context, PageControlScreen.routeName);
+                context, PlanControlScreen.routeName);
           },
         ),
         actions: <Widget>[

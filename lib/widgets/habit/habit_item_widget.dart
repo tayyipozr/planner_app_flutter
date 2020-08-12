@@ -52,77 +52,99 @@ class _HabitItemUIState extends State<HabitItemUI> {
             child: ListView.builder(
               itemCount: habit.itemCount,
               itemBuilder: (_, idx) {
-                return Dismissible(
-                  direction: DismissDirection.startToEnd,
-                  onDismissed: (direction) {
-                    if (direction == DismissDirection.startToEnd) {
-                      try {
-                        habit.removeItem(habits[idx].id);
-                        print(habits[idx].id);
-                      } catch (err) {
-                        print(err);
-                        showDialog(
-                          context: context,
-                          builder: (ctx) => AlertDialog(
-                            title: Text("An error occured"),
-                            content: Text(err.toString()),
-                            actions: <Widget>[
-                              FlatButton(
-                                child: Text("OK"),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              )
-                            ],
-                          ),
-                        );
-                      }
-                      Scaffold.of(context).showSnackBar(
-                          //place.removeItem(data[idx].id);
-                          SnackBar(
-                        content:
-                            Text("${habits[idx].name} deleted from habits."),
-                        action: SnackBarAction(
-                          label: "UNDO",
-                          onPressed: () {
-                            print("bringed back");
-                          },
+                return
+                    //Dismissible(
+                    //   direction: DismissDirection.startToEnd,
+                    //   onDismissed: (direction) {
+                    //     if (direction == DismissDirection.startToEnd) {
+                    //       try {
+                    //         habit.removeItem(habits[idx].id);
+                    //         print(habits[idx].id);
+                    //       } catch (err) {
+                    //         print(err);
+                    //         showDialog(
+                    //           context: context,
+                    //           builder: (ctx) => AlertDialog(
+                    //             title: Text("An error occured"),
+                    //             content: Text(err.toString()),
+                    //             actions: <Widget>[
+                    //               FlatButton(
+                    //                 child: Text("OK"),
+                    //                 onPressed: () {
+                    //                   Navigator.of(context).pop();
+                    //                 },
+                    //               )
+                    //             ],
+                    //           ),
+                    //         );
+                    //       }
+                    //       Scaffold.of(context).showSnackBar(
+                    //           //place.removeItem(data[idx].id);
+                    //           SnackBar(
+                    //         content:
+                    //             Text("${habits[idx].name} deleted from habits."),
+                    //         action: SnackBarAction(
+                    //           label: "UNDO",
+                    //           onPressed: () {
+                    //             print("bringed back");
+                    //           },
+                    //         ),
+                    //       ));
+                    //     }
+                    //   },
+                    //   key: Key(habits[idx].id),
+                    //   child:
+                    Card(
+                  elevation: 5,
+                  child: ListTile(
+                    leading: habits[idx].icon,
+                    title: Text(
+                      '${habits[idx].name}',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
+                    subtitle: Row(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Start : ${DateFormat.yMd().format(habits[idx].start)}",
+                            ),
+                            Text(
+                              "Due   : ${DateFormat.yMd().format(habits[idx].dueDate)}",
+                            ),
+                            Text(
+                              "Day   : " +
+                                  (habits[idx].dueDate.day - habits[idx].start.day)
+                                      .toString(),
+                            )
+                          ],
                         ),
-                      ));
-                    }
-                  },
-                  key: Key(habits[idx].id),
-                  child: Card(
-                    elevation: 5,
-                    child: ListTile(
-                      leading: habits[idx].icon,
-                      title: Text(
-                        '${habits[idx].name}',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      subtitle: Text(
-                          "start: ${DateFormat.yMd().format(habits[idx].start)} - due: ${DateFormat.yMd().format(habits[idx].dueDate)}"),
-                      trailing: IconButton(
-                        color: Colors.brown,
-                        icon: Icon(Icons.edit),
-                        onPressed: () {
-                          showModalBottomSheet(
-                            context: context,
-                            builder: (context) {
-                              return HabitBottomSheet(
-                                id: habits[idx].id,
-                                name: habits[idx].name,
-                                start: habits[idx].start,
-                                due: habits[idx].dueDate,
-                                fromEdit: true,
-                              );
-                            },
-                          );
-                        },
-                      ),
+                        
+                      ],
+                    ),
+                    trailing: IconButton(
+                      color: Colors.brown,
+                      icon: Icon(Icons.edit),
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (context) {
+                            return HabitBottomSheet(
+                              id: habits[idx].id,
+                              name: habits[idx].name,
+                              start: habits[idx].start,
+                              due: habits[idx].dueDate,
+                              fromEdit: true,
+                            );
+                          },
+                        );
+                      },
                     ),
                   ),
                 );
+                //  );
               },
             ),
           );

@@ -2,10 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:planner_app/app_localizations.dart';
 import 'package:provider/provider.dart';
-import 'package:show_up_animation/show_up_animation.dart';
 
 import '../providers/dailyPlans_provider.dart';
-
 import '../models/dailyplan.dart';
 
 class MyDailyPlansScreen extends StatefulWidget {
@@ -57,6 +55,7 @@ class _MyDailyPlansScreenState extends State<MyDailyPlansScreen> {
       Colors.purple,
       Colors.green
     ];
+
     List<String> plans = [];
     List clocks = [
       "06:00",
@@ -68,8 +67,60 @@ class _MyDailyPlansScreenState extends State<MyDailyPlansScreen> {
       "18:00",
       "20:00",
       "22:00",
-      "24:00"
+      "24:00",
     ];
+    // List clocks = [
+    //   [
+    //     DropdownMenuItem(child: Text("06:00")),
+    //     DropdownMenuItem(child: Text("06:30")),
+    //     DropdownMenuItem(child: Text("07:00"))
+    //   ],
+    //   [
+    //     DropdownMenuItem(child: Text("07:30")),
+    //     DropdownMenuItem(child: Text("08:00")),
+    //     DropdownMenuItem(child: Text("08:30"))
+    //   ],
+    //   [
+    //     DropdownMenuItem(child: Text("09:00")),
+    //     DropdownMenuItem(child: Text("09:30")),
+    //     DropdownMenuItem(child: Text("10:00"))
+    //   ],
+    //   [
+    //     DropdownMenuItem(child: Text("10:30")),
+    //     DropdownMenuItem(child: Text("11:00")),
+    //     DropdownMenuItem(child: Text("11:30"))
+    //   ],
+    //   [
+    //     DropdownMenuItem(child: Text("12:00")),
+    //     DropdownMenuItem(child: Text("12:30")),
+    //     DropdownMenuItem(child: Text("13:00"))
+    //   ],
+    //   [
+    //     DropdownMenuItem(child: Text("13:30")),
+    //     DropdownMenuItem(child: Text("14:00")),
+    //     DropdownMenuItem(child: Text("14:30"))
+    //   ],
+    //   [
+    //     DropdownMenuItem(child: Text("15:00")),
+    //     DropdownMenuItem(child: Text("15:30")),
+    //     DropdownMenuItem(child: Text("16:00"))
+    //   ],
+    //   [
+    //     DropdownMenuItem(child: Text("16:30")),
+    //     DropdownMenuItem(child: Text("17:00")),
+    //     DropdownMenuItem(child: Text("17:30"))
+    //   ],
+    //   [
+    //     DropdownMenuItem(child: Text("18:00")),
+    //     DropdownMenuItem(child: Text("18:30")),
+    //     DropdownMenuItem(child: Text("19:00"))
+    //   ],
+    //   [
+    //     DropdownMenuItem(child: Text("19:30")),
+    //     DropdownMenuItem(child: Text("20:00")),
+    //     DropdownMenuItem(child: Text("20:30"))
+    //   ],
+    // ];
 
     if (todayPlanItem != null) {
       print("worked");
@@ -198,7 +249,16 @@ class _MyDailyPlansScreenState extends State<MyDailyPlansScreen> {
                                 top: BorderSide(color: colorList[idx % 4]))),
                         width: width / 8.31,
                         height: height / 13,
-                        child: Text(
+                        child:
+                            //DropdownButton(
+                            //   dropdownColor: Theme.of(context).primaryColor,
+                            //   isDense: true,
+                            //   iconSize: 5.0,
+                            //   underline: Container(),
+                            //   items: clocks[idx],
+                            //   onChanged: (value) => clocks[idx] = value,
+                            // )
+                            Text(
                           clocks[idx],
                           textAlign: TextAlign.center,
                           style: TextStyle(color: colorList[idx % 4]),
@@ -219,7 +279,16 @@ class _MyDailyPlansScreenState extends State<MyDailyPlansScreen> {
                                 top: BorderSide(color: colorList[idx % 4]))),
                         width: width / 8.31,
                         height: height / 13,
-                        child: Text(
+                        child:
+                            // DropdownButton(
+                            //   dropdownColor: Theme.of(context).primaryColor,
+                            //   isDense: true,
+                            //   iconSize: 5.0,
+                            //   underline: Container(),
+                            //   items: clocks[idx],
+                            //   onChanged: (value) => clocks[idx] = value,
+                            // )
+                            Text(
                           clocks[idx],
                           textAlign: TextAlign.center,
                           style: TextStyle(color: colorList[idx % 4]),

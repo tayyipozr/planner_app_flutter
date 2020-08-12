@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_gifimage/flutter_gifimage.dart';
 
 import '../providers/place_provider.dart';
-import '../screens/page_control_screen.dart';
+import 'plan_control_screen.dart';
 
 import '../widgets/place_card.dart';
 
@@ -83,110 +83,99 @@ class _PlacesToGoScreenState extends State<PlacesToGoScreen>
     final cardTitles =
         AppLocalizations.of(context).translate("places-titles").split(',');
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-        leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios),
-            onPressed: () {
-              Navigator.pushReplacementNamed(
-                  context, PageControlScreen.routeName);
-            }),
-      ),
-      body: _isLoading
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : Stack(
-              children: [
-                Positioned(
-                  top: height / 2.5,
-                  left: width / 2.4,
-                  child: InkWell(
-                    onTap: () {
-                      if (animatedRight) {
-                        _cardAnimation.reverse();
-                        _controller.animateBack(0).then((_) {
-                          if (_controller.value == 0) {
-                            _controller.value = 95;
-                            _controller.animateBack(40);
-                          }
-                        });
-                        animatedRight = false;
-                      } else {
-                        _cardAnimation.forward();
-                        _controller.animateTo(95).then((_) {
-                          if (_controller.value == 95) {
-                            _controller.value = 0;
-                            _controller.animateTo(40);
-                          }
-                        });
-                        animatedRight = true;
-                      }
-                    },
-                    child: GifImage(
-                        height: height / 10,
-                        fit: BoxFit.fill,
-                        controller: _controller,
-                        image: AssetImage(
-                          'assets/img/map.gif',
-                        )),
-                  ),
+    return _isLoading
+        ? Center(
+            child: CircularProgressIndicator(),
+          )
+        : Stack(
+            children: [
+              Positioned(
+                top: height / 2.5,
+                left: width / 2.4,
+                child: InkWell(
+                  onTap: () {
+                    if (animatedRight) {
+                      _cardAnimation.reverse();
+                      _controller.animateBack(0).then((_) {
+                        if (_controller.value == 0) {
+                          _controller.value = 95;
+                          _controller.animateBack(40);
+                        }
+                      });
+                      animatedRight = false;
+                    } else {
+                      _cardAnimation.forward();
+                      _controller.animateTo(95).then((_) {
+                        if (_controller.value == 95) {
+                          _controller.value = 0;
+                          _controller.animateTo(40);
+                        }
+                      });
+                      animatedRight = true;
+                    }
+                  },
+                  child: GifImage(
+                      height: height / 10,
+                      fit: BoxFit.fill,
+                      controller: _controller,
+                      image: AssetImage(
+                        'assets/img/map.gif',
+                      )),
                 ),
-                Positioned(
-                  top: height / 50,
-                  left: width / 12,
-                  right: width / 12,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      PlaceCard(0, datum[0], FractionalOffset.topLeft,
-                          _backScale, _frontScale,
-                          padding: height / 20,
-                          cardTitle: cardTitles[0],
-                          imageUrl: "assets/img/continents/europe.png"),
-                      PlaceCard(1, datum[1], FractionalOffset.topCenter,
-                          _backScale, _frontScale,
-                          cardTitle: cardTitles[1],
-                          imageUrl: "assets/img/continents/asia.png"),
-                      PlaceCard(
-                        2,
-                        datum[2],
-                        FractionalOffset.topRight,
-                        _backScale,
+              ),
+              Positioned(
+                top: height / 50,
+                left: width / 12,
+                right: width / 12,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    PlaceCard(0, datum[0], FractionalOffset.topLeft, _backScale,
                         _frontScale,
                         padding: height / 20,
-                        cardTitle: cardTitles[2],
-                        imageUrl: "assets/img/continents/america.png",
-                      ),
-                    ],
-                  ),
+                        cardTitle: cardTitles[0],
+                        imageUrl: "assets/img/continents/europe.png"),
+                    PlaceCard(1, datum[1], FractionalOffset.topCenter,
+                        _backScale, _frontScale,
+                        cardTitle: cardTitles[1],
+                        imageUrl: "assets/img/continents/asia.png"),
+                    PlaceCard(
+                      2,
+                      datum[2],
+                      FractionalOffset.topRight,
+                      _backScale,
+                      _frontScale,
+                      padding: height / 20,
+                      cardTitle: cardTitles[2],
+                      imageUrl: "assets/img/continents/america.png",
+                    ),
+                  ],
                 ),
-                Positioned(
-                  bottom: height / 50,
-                  left: width / 12,
-                  right: width / 12,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      PlaceCard(3, datum[3], FractionalOffset.bottomLeft,
-                          _backScale, _frontScale,
-                          cardTitle: cardTitles[3],
-                          imageUrl: "assets/img/continents/australia.png"),
-                      PlaceCard(4, datum[4], FractionalOffset.bottomCenter,
-                          _backScale, _frontScale,
-                          padding: height / 10,
-                          cardTitle: cardTitles[4],
-                          imageUrl: "assets/img/continents/south_america.png"),
-                      PlaceCard(5, datum[5], FractionalOffset.bottomRight,
-                          _backScale, _frontScale,
-                          cardTitle: cardTitles[5],
-                          imageUrl: "assets/img/continents/africa.png")
-                    ],
-                  ),
+              ),
+              Positioned(
+                bottom: height / 50,
+                left: width / 12,
+                right: width / 12,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    PlaceCard(3, datum[3], FractionalOffset.bottomLeft,
+                        _backScale, _frontScale,
+                        cardTitle: cardTitles[3],
+                        imageUrl: "assets/img/continents/australia.png"),
+                    PlaceCard(4, datum[4], FractionalOffset.bottomCenter,
+                        _backScale, _frontScale,
+                        padding: height / 10,
+                        cardTitle: cardTitles[4],
+                        imageUrl: "assets/img/continents/south_america.png"),
+                    PlaceCard(5, datum[5], FractionalOffset.bottomRight,
+                        _backScale, _frontScale,
+                        cardTitle: cardTitles[5],
+                        imageUrl: "assets/img/continents/africa.png")
+                  ],
                 ),
-              ],
-            ),
-    );
+              ),
+            ],
+          );
   }
 }

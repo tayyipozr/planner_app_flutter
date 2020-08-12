@@ -3,8 +3,7 @@ import 'package:planner_app/app_localizations.dart';
 
 import '../widgets/habit/habit_bottom_sheet_widget.dart';
 import '../widgets/habit/habit_item_widget.dart';
-
-import 'page_control_screen.dart';
+import 'plan_control_screen.dart';
 
 class MyHabitsScreen extends StatelessWidget {
   static const routeName = "/my-habits";
@@ -21,7 +20,7 @@ class MyHabitsScreen extends StatelessWidget {
             icon: Icon(Icons.arrow_back_ios),
             onPressed: () {
               Navigator.pushReplacementNamed(
-                  context, PageControlScreen.routeName);
+                  context, PlanControlScreen.routeName);
             },
           ),
           actions: <Widget>[
